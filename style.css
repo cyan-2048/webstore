@@ -1,0 +1,10 @@
+#apps > div {
+	max-height: 0px;
+	transition: max-height ease 0.5s, margin-bottom ease 0.5s, opacity ease 0.3s;
+	overflow: hidden;
+	opacity: 0;
+}
+
+#category {
+	margin-bottom: 1em;
+}

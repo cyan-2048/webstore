@@ -6,12 +6,39 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>webstore alpha</title>
 		<script src="index.js"></script>
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous" />
 		<link rel="stylesheet" href="style.css" />
 	</head>
 	<body>
-		<div id="category">
-			<style></style>
+		<div id="barcontainer">
+			<div id="bar1">
+				<a href="https://groups.google.com/g/bananahackers">Forums</a>
+			</div>
+			<div id="bar2">
+				<select id="sort">
+					<option value="abc">Alphabetical</option>
+					<option value="cab">Categorical</option>
+				</select>
+				<sel id="sort" tabindex="0">
+					<cho value="abc"><i class="fas fa-sort-alpha-down"></i>&nbsp;&nbsp;Alphabetical</cho>
+					<drop>
+						<opt value="abc"><i class="fas fa-sort-alpha-down"></i>&nbsp;&nbsp;Alphabetical</opt>
+						<opt value="cab"><i class="fas fa-tags"></i>&nbsp;&nbsp;Categorical</opt>
+					</drop>
+				</sel>
+
+				<div class="spacer"></div>
+
+				<div id="le">0</div>
+				<input id="search" type="text" />
+			</div>
+			<div id="category">
+				<style></style>
+			</div>
 		</div>
-		<div id="apps"></div>
+
+		<div id="apps">
+			<div id="container"></div>
+		</div>
 	</body>
 </html>

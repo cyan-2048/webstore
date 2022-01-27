@@ -256,6 +256,7 @@ function hashManager() {
 	}
 }
 
+/*
 async function dlCountApp(appSlug) {
 	return await fetch(`${ratings}/download_counter/`);
 }
@@ -266,7 +267,7 @@ async function getAppRatings(appID) {
 	if (!rawRatings.ok) throw new Error(`Unable to fetch ratings for app ${appID}.`);
 	return await rawRatings.json();
 }
-
+*/
 const capitalize = ([first, ...rest], locale = navigator.language) => first.toLocaleUpperCase(locale) + rest.join("");
 
 const truncate = (n, t) => {

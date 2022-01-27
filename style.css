@@ -1,7 +1,31 @@
 @import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,400&display=swap");
 
 :root {
-	--accent: #ffc916;
+	--accent: #ffe135;
+	--color1: black;
+	--color2: black;
+	--color3: rgb(170, 170, 170);
+	--color4: #313131;
+	--back1: white;
+	--back2: #f8f8f8;
+	--back3: white;
+	--back4: var(--back2);
+	--shadow: rgba(0, 0, 0, 0.15);
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--accent: #ffe135;
+		--color1: white;
+		--color2: white;
+		--color4: rgb(170, 170, 170);
+		--color3: rgb(180, 180, 180);
+		--back1: #404048;
+		--back2: #282830;
+		--back3: #303038;
+		--back4: #282830;
+		--shadow: rgba(0, 0, 0, 0.7);
+	}
 }
 
 * {
@@ -15,12 +39,23 @@
 	overflow: hidden;
 	display: none;
 	border-radius: 8px;
-	box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.15);
-	background: #fff;
+	box-shadow: 0 1px 4px 0 var(--shadow);
+	background: var(--back1);
 	padding: 16px;
 	margin: 0 10px 16px;
+	color: var(--color1);
 	width: 100%;
 	flex-direction: column;
+	outline: transparent solid 0px;
+	transition: outline 0.2s linear;
+}
+
+#apps #container > div:hover {
+	outline: var(--accent) solid 3px;
+}
+
+i {
+	pointer-events: none;
 }
 
 @media (min-width: 567px) {
@@ -59,11 +94,13 @@ html {
 	overflow: auto;
 	overflow-x: hidden;
 	scrollbar-width: thin;
+	background-color: var(--back3);
 }
 
 #apps {
-	background-color: #f8f8f8;
+	background-color: var(--back4);
 	justify-content: center;
+	border-radius: 9px 9px 0px 0px;
 }
 
 #apps #container {
@@ -71,6 +108,7 @@ html {
 	padding-top: 50px;
 	padding-left: 12px;
 	padding-right: 12px;
+	padding-bottom: 67px;
 	flex-wrap: wrap;
 	justify-content: flex-start;
 }
@@ -136,13 +174,13 @@ html,
 }
 
 #category button {
-	height: 30px;
+	height: 35px;
 	padding: 0px 10px;
 	font-weight: 600;
 	font-size: 16px;
-	border-radius: 7px;
-	color: rgb(170, 170, 170);
-	background-color: rgb(248, 248, 248);
+	border-radius: 5px;
+	color: var(--color3);
+	background-color: var(--back2);
 	border: none;
 	margin: 5px 0;
 	margin-right: 10px;
@@ -150,7 +188,7 @@ html,
 
 #category button.selected {
 	background-color: var(--accent);
-	color: white;
+	color: black;
 }
 
 .app .header img {
@@ -169,12 +207,12 @@ html,
 .header .na {
 	font-size: 17px;
 	margin: 2px 0;
-	color: #313131;
+	color: var(--color4);
 	font-weight: 600;
 }
 .header .au {
 	font-size: 12px;
-	color: #aaa;
+	color: var(--color3);
 	font-weight: 600;
 }
 
@@ -197,9 +235,9 @@ html,
 	font-size: 14px;
 	border: none;
 	text-decoration: none;
-	background-color: var(--accent);
+	background-color: var(--back2);
 	line-height: 2;
-	color: white;
+	color: var(--color3);
 	border-radius: 7px;
 	flex-grow: 1;
 	text-align: center;
@@ -235,8 +273,15 @@ html,
 	border: none;
 }
 
+#search {
+	background: var(--back1);
+	padding: 10px;
+	color: var(--color1);
+}
+
 #scrollup i {
 	font-size: inherit;
+	color: black;
 }
 
 #scrollup:active {
@@ -269,15 +314,17 @@ sel,
 #search {
 	position: relative;
 	width: 190px;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 2px 5px var(--shadow);
 	border: none;
 	outline: none;
+	border-radius: 5px;
 }
 
 #le {
 	line-height: 39px;
 	margin-right: 10px;
 	font-weight: 600;
+	color: var(--color1);
 }
 
 sel {
@@ -290,18 +337,20 @@ sel * {
 }
 
 sel i {
-	color: #666;
+	color: var(--color4);
 }
 
 sel cho {
 	padding: 10px;
 	box-sizing: border-box;
-	border-radius: 3px;
+	border-radius: 5px;
 	width: 100%;
 	cursor: pointer;
 	position: relative;
 	user-select: none;
-	background: #fff;
+	background: var(--back1);
+	color: var(--color1);
+	transition: border-radius ease 0.3s;
 }
 
 sel cho::after {
@@ -312,13 +361,13 @@ sel cho::after {
 	width: 6px;
 	height: 6px;
 	transform: translateY(-50%) rotate(45deg);
-	border-right: 2px solid #666;
-	border-bottom: 2px solid #666;
+	border-right: 2px solid var(--color4);
+	border-bottom: 2px solid var(--color4);
 	transition: 0.2s ease;
 }
 
 sel:focus cho {
-	border-radius: 3px 3px 0 0;
+	border-radius: 5px 5px 0 0;
 }
 sel:focus cho::after {
 	transform: translateY(-1%) rotate(-135deg);
@@ -329,14 +378,15 @@ sel drop {
 	width: 100%;
 	border-radius: 0 0 3px 3px;
 	overflow: hidden;
-	border-top: 1px solid #eee;
+	border-top: 1px solid var(--back2);
 	z-index: 1;
-	background: #fff;
+	background: var(--back1);
 	transform: scale(1, 0);
 	transform-origin: top center;
 	visibility: hidden;
 	transition: 0.2s ease;
 	box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+	color: var(--color1);
 }
 
 sel drop opt {
@@ -345,9 +395,62 @@ sel drop opt {
 	cursor: pointer;
 }
 sel drop opt:hover {
-	background: #f8f8f8;
+	background: var(--back2);
 }
 sel:focus drop {
 	visibility: visible;
 	transform: scale(1, 1);
+}
+
+#splash {
+	width: 100vw;
+	height: 100vh;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 99;
+	background: var(--back4);
+	opacity: 1;
+	visibility: visible;
+	transition: visibility ease 1s, opacity ease 1s;
+}
+
+#splash #image {
+	top: 50%;
+	right: 51%;
+	transform: translate(50%, -50%);
+	position: absolute;
+	width: 200px;
+	height: 200px;
+}
+
+#banana1,
+#banana2 {
+	background-image: url("banana.png");
+	width: 205px;
+	height: 108px;
+	background-size: contain;
+	background-repeat: no-repeat;
+	position: absolute;
+	top: 0;
+}
+
+#banana1 {
+	transform: rotate(33.829302deg);
+}
+
+#banana2 {
+	transform: rotate(-61.227117deg);
+}
+
+#splash #image.loaded * {
+	transition: transform 1s ease;
+}
+
+#splash #image.loaded #banana2 {
+	transform: rotate(-31.227117deg) translateX(-150vh);
+}
+
+#splash #image.loaded #banana1 {
+	transform: rotate(33.829302deg) translateX(150vh);
 }

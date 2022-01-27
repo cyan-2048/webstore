@@ -136,7 +136,13 @@ const init = (e) => {
 		}
 		document.getElementById("apps").children[0].appendChild(b);
 	}
-	if (e != undefined) window.location.hash = "";
+
+	if (e != undefined) {
+		window.location.hash = "";
+	} else {
+		document.querySelector("#splash #image").className = "loaded";
+		document.getElementById("splash").style = "opacity: 0; visibility: hidden";
+	}
 	if (window.location.hash != "") hashManager();
 	document.getElementById("le").innerText = document.querySelectorAll(`[data-sel="app"] + #apps .app`).length;
 };
@@ -176,10 +182,12 @@ window.addEventListener("DOMContentLoaded", () => {
 					c.style.transform = "translateY(70px)";
 					return;
 				}
-				if (event.deltaY < 0) {
+				if (event.deltaY < 0 && c.style.transform == "translateY(70px)") {
 					c.style.transform = "none";
-				} else if (event.deltaY > 0) {
+				} else if (event.deltaY > 0 && c.style.transform == "none") {
 					c.style.transform = "translateY(70px)";
+				} else {
+					return;
 				}
 			});
 		}
@@ -199,8 +207,6 @@ document.onclick = (e) => {
 		sort(e);
 	} else if (e.target.className == "share") {
 		clipboard(window.location.origin + "/#" + e.target.parentElement.parentElement.dataset.slug);
-	} else if (e.target.tagName == "I") {
-		e.target.parentElement.click();
 	} else if (e.target.id == "scrollup") {
 		document.body.scrollTo({ top: 0, behavior: "smooth" });
 	}

@@ -454,3 +454,8 @@ sel:focus drop {
 #splash #image.loaded #banana1 {
 	transform: rotate(33.829302deg) translateX(150vh);
 }
+
+/* gradient that happens on kaios or firefox mobile old versions */
+button {
+	background-image: none !important;
+}

@@ -116,16 +116,20 @@ const init = (e) => {
 		var c = document.createElement("a");
 		c.href = a.download.url;
 		c.innerHTML = `<i class="fas fa-file-download"></i> Download`;
-		var k = document.createElement("button");
-		k.className = "share";
-		k.innerHTML = `<i class="far fa-clipboard"></i> Share`;
+
+		var k = null;
+		if (!navigator.userAgent.toLocaleLowerCase().includes("kaios")) {
+			k = document.createElement("button");
+			k.className = "share";
+			k.innerHTML = `<i class="far fa-clipboard"></i> Share`;
+		}
 
 		var bcn = document.createElement("div");
 		bcn.className = "bucon";
 
 		bcn.appendChild(j);
 		bcn.appendChild(c);
-		bcn.appendChild(k);
+		if (k != null) bcn.appendChild(k);
 
 		b.appendChild(bcn);
 
@@ -177,7 +181,7 @@ window.addEventListener("DOMContentLoaded", () => {
 		if (/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent.toLowerCase())) {
 			c.style.transform = "none";
 		} else {
-			window.addEventListener("wheel", function (event) {
+			document.getElementById("apps").addEventListener("wheel", function (event) {
 				if (document.body.scrollTop == 0) {
 					c.style.transform = "translateY(70px)";
 					return;

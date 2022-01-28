@@ -33,6 +33,7 @@
 	box-sizing: border-box;
 	font-weight: 500;
 	font-size: 16px;
+	scrollbar-width: thin;
 }
 
 #apps #container > div {
@@ -93,7 +94,6 @@ html {
 	left: 0;
 	overflow: auto;
 	overflow-x: hidden;
-	scrollbar-width: thin;
 	background-color: var(--back3);
 }
 
@@ -159,7 +159,8 @@ html,
 #apps,
 #apps #container,
 .app .header,
-#barcontainer {
+#barcontainer,
+#appcard #head {
 	display: flex;
 }
 
@@ -191,7 +192,8 @@ html,
 	color: black;
 }
 
-.app .header img {
+.app .header img,
+#appcard #head img {
 	width: 80px;
 	height: 80px;
 	margin-right: 10px;
@@ -459,4 +461,139 @@ sel:focus drop {
 /* gradient that happens on kaios or firefox mobile old versions */
 button {
 	background-image: none !important;
+}
+
+@media screen and (width: 320px) {
+	.bucon a {
+		margin-right: 0px;
+	}
+}
+@media screen and (width: 240px) {
+	.bucon a {
+		margin-right: 0px;
+	}
+}
+
+#category button.selected {
+	cursor: default;
+}
+
+#appcard {
+	background-color: var(--back1);
+	border-radius: 8px;
+	box-shadow: 0 2px 5px 0 var(--shadow);
+	padding: 40px;
+	width: 640px;
+	position: fixed;
+	top: 50%;
+	right: 50%;
+	transform: translate(50%, -50%);
+	height: calc(100vh - 35px);
+	overflow: auto;
+}
+
+#cards {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background: var(--shadow);
+}
+
+@media screen and (max-width: 640px) {
+	#appcard {
+		padding: 33px 16px 20px 16px;
+		width: calc(100vw - 35px);
+	}
+}
+
+#cards .close {
+	position: absolute;
+	top: 13px;
+	right: 15px;
+	color: var(--color3);
+	background: var(--back2);
+	padding: 4.1px 8px;
+	border-radius: 50%;
+	width: 25px;
+	height: 25px;
+	font-size: 13px;
+}
+
+.close i {
+	font-size: inherit;
+}
+
+.close:hover {
+	opacity: 0.7;
+}
+
+#appcard #head {
+	flex-flow: row;
+}
+
+#appcard #head #na {
+	font-size: 28px;
+	color: var(--color4);
+	line-height: 30px;
+	font-weight: 600;
+	margin-bottom: 2px;
+}
+
+#appcard #head #ca {
+	color: var(--accent);
+	font-size: 21px;
+	line-height: 23px;
+	font-weight: 600;
+	margin-bottom: 2px;
+}
+
+#appcard #head #de {
+	color: var(--color3);
+	font-size: 16px;
+	display: block;
+	line-height: 24px;
+}
+
+#appcard > #de {
+	margin-top: 30px;
+	margin-bottom: 32px;
+	color: var(--color1);
+}
+
+#cards .ti {
+	font-weight: 600;
+	margin-bottom: 8px;
+	display: block;
+	font-size: 12px;
+	color: var(--color3);
+	text-align: left;
+}
+
+#cards > div {
+	overflow: auto;
+}
+
+#appcard #img {
+	white-space: nowrap;
+	width: 100%;
+	overflow: auto;
+}
+
+#appcard #scr {
+	margin-bottom: 32px;
+}
+
+::-webkit-scrollbar {
+	width: 10px;
+}
+::-webkit-scrollbar-track {
+	background: rgba(0, 0, 0, 0);
+}
+::-webkit-scrollbar-thumb {
+	background: #888;
+}
+::-webkit-scrollbar-thumb:hover {
+	background: #555;
 }

@@ -1,6 +1,52 @@
-var data,
-	database = "https://banana-hackers.gitlab.io/store-db/data.json",
-	ratings = "https://bhackers.uber.space/srs/v1";
+new_versions = {};
+last_check = localStorage.versions != undefined ? (last_check = JSON.parse(localStorage.versions)) : (last_check = { non_existed: 1.0 });
+proxy = localStorage.proxy != undefined ? (proxy = JSON.parse(localStorage.proxy)) : (proxy = "https://api.allorigins.win/raw?url=");
+ratings = localStorage.ratings != undefined ? (ratings = JSON.parse(localStorage.ratings)) : (ratings = "https://bhackers.uber.space/srs/v1");
+database = localStorage.database != undefined ? (database = JSON.parse(localStorage.database)) : (database = "https://banana-hackers.gitlab.io/store-db/data.json");
+
+(() => {
+	index = 0;
+	var cancel = false;
+
+	function next() {
+		index = index + 1;
+		if (index == data.apps.length || cancel) {
+			index = 0;
+			if (!cancel) {
+				localStorage.versions = JSON.stringify(last_check);
+			}
+			cancel = false;
+			return;
+		}
+		update();
+	}
+
+	cancel_update = () => {
+		cancel = true;
+	};
+
+	update = () => {
+		let ef = data.apps[index];
+		function res(r) {
+			console.log("works");
+			if (last_check[ef.slug] && last_check[ef.slug] != r.version) {
+				new_versions[ef.slug] = { from: last_check[ef.slug], to: r.version };
+			}
+			last_check[ef.slug] = r.version;
+			next();
+		}
+		fetch(ef.download.manifest)
+			.then((r) => r.json())
+			.then((r) => res(r))
+			.catch((e) => {
+				console.error(e);
+				fetch(proxy + ef.download.manifest)
+					.then((r) => r.json())
+					.then((r) => res(r))
+					.catch((e) => next());
+			});
+	};
+})();
 
 const database_init = () => {
 	fetch(database)
@@ -11,6 +57,7 @@ const database_init = () => {
 		})
 		.then((response) => {
 			data = response;
+
 			if (document.readyState === "complete" || document.readyState === "interactive") {
 				init();
 			} else {
@@ -19,6 +66,51 @@ const database_init = () => {
 					init(a);
 				});
 			}
+
+			fetch(ratings + "/download_counter/")
+				.then((resulta) => resulta.json())
+				.then((resulta) => {
+					data.dl = resulta;
+					let so = document.getElementById("sort");
+					if (so.tagName == "SEL") {
+						var i = document.createElement("opt");
+						i.innerHTML = `<i class="fas fa-fire-alt"></i>Popularity`;
+						i.setAttribute("value", "pop");
+						so.querySelector("drop").appendChild(i);
+					} else {
+						var i = document.createElement("option");
+						i.innerText = "Popularity";
+						i.value = "pop";
+						so.add(i);
+					}
+				})
+				.catch((e) => {
+					console.log(e);
+					alert("can't download download counts, store will not have download count functionality");
+				})
+				.then(() => {
+					fetch(ratings + "/ratings")
+						.then((resulta) => resulta.json())
+						.then((resulta) => {
+							data.ratings = resulta;
+							let so = document.getElementById("sort");
+							if (so.tagName == "SEL") {
+								var i = document.createElement("opt");
+								i.innerHTML = `<i class="fas fa-star"></i>Ratings`;
+								i.setAttribute("value", "ra");
+								so.querySelector("drop").appendChild(i);
+							} else {
+								var i = document.createElement("option");
+								i.innerText = "Ratings";
+								i.value = "ra";
+								so.add(i);
+							}
+						})
+						.catch((e) => {
+							console.log(e);
+							alert("can't download download ratings, store will not have ratings functionality");
+						});
+				});
 		});
 };
 
@@ -76,9 +168,7 @@ const init = (e) => {
 		d.className = "header";
 		var img = document.createElement("img");
 		img.src = a.icon;
-		img.onerror = (e) => {
-			e.target.src = `data:@file/png;base64,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`;
-		};
+		img.alt = " ";
 		d.appendChild(img);
 
 		var ca = document.createElement("div");
@@ -110,9 +200,10 @@ const init = (e) => {
 		sp.className = "spacer";
 		b.appendChild(sp);
 
-		var j = document.createElement("button");
+		var j = document.createElement("a");
 		j.className = "info";
 		j.innerHTML = `<i class="fas fa-info-circle"></i> Info`;
+		j.href = `#${a.slug}`;
 		var c = document.createElement("a");
 		c.href = a.download.url;
 		c.innerHTML = `<i class="fas fa-file-download"></i> Download`;
@@ -147,7 +238,7 @@ const init = (e) => {
 		document.querySelector("#splash #image").className = "loaded";
 		document.getElementById("splash").style = "opacity: 0; visibility: hidden";
 	}
-	if (window.location.hash != "") hashManager();
+	if (window.location.hash != "") hashManager(undefined);
 	document.getElementById("le").innerText = document.querySelectorAll(`[data-sel="app"] + #apps .app`).length;
 };
 
@@ -213,6 +304,8 @@ document.onclick = (e) => {
 		clipboard(window.location.origin + "/#" + e.target.parentElement.parentElement.dataset.slug);
 	} else if (e.target.id == "scrollup") {
 		document.body.scrollTo({ top: 0, behavior: "smooth" });
+	} else if (e.target.id == "cards") {
+		document.querySelector("#appcard .close").click();
 	}
 };
 
@@ -225,15 +318,29 @@ function sort(e) {
 		}
 	}
 
+	data.apps.sort((a, b) => a.name.localeCompare(b.name));
 	switch (isAvail()) {
-		case "abc":
-			data.apps.sort((a, b) => a.name.localeCompare(b.name));
-			break;
 		case "cab":
-			data.apps.sort((a, b) => a.name.localeCompare(b.name));
 			data.apps.sort((a, b) => a.meta.categories[0].localeCompare(b.meta.categories[0]));
 			break;
+		case "ra":
+			data.apps.sort((a, b) => {
+				var o = 0;
+				if (!data.ratings[a.slug]) return true;
+				if (data.ratings[b.slug]) o = data.ratings[b.slug].average_rating;
+				return data.ratings[a.slug].average_rating < o;
+			});
+			break;
+		case "pop":
+			data.apps.sort((a, b) => {
+				var o = 0;
+				if (!data.dl[a.slug]) return true;
+				if (data.dl[b.slug]) o = data.dl[b.slug];
+				return data.dl[a.slug] < o;
+			});
+			break;
 	}
+
 	// if changed via select element
 	if (e != undefined && e.target) {
 		init(e);
@@ -242,12 +349,15 @@ function sort(e) {
 
 window.onhashchange = hashManager;
 
-function hashManager() {
-	let a = document.querySelector(`.app[data-slug=${window.location.hash.split("#")[1]}]`);
-	var c = 500;
+var info_open = false;
+
+function hashManager(e) {
+	let hash = window.location.hash.split("#")[1];
+	let a = document.querySelector(`.app[data-slug="${hash}"]`);
+	var c = 200;
 	if (document.querySelector("#category").dataset.sel == "app") c = 0;
 	if (a != null && window.location.hash != "") {
-		document.querySelector("button[data-name=app]").click();
+		if (e == undefined) document.querySelector("button[data-name=app]").click();
 		setTimeout(() => {
 			const rect = a.getBoundingClientRect();
 			const elY = rect.top - document.body.getBoundingClientRect().top + rect.height / 2;
@@ -258,20 +368,210 @@ function hashManager() {
 			});
 		}, c);
 	}
+
+	if (info_open && window.location.hash == "") {
+		document.querySelector("#appcard .close").click();
+		return;
+	}
+
+	let r = data.apps.find((o) => {
+		return o.slug == hash;
+	});
+
+	if (r == undefined) return;
+
+	document.body.style.overflow = "hidden";
+	let v = document.getElementById("appcard");
+
+	v.querySelector("#head img").src = "";
+	v.querySelector("#head img").src = r.icon;
+	v.querySelector("#head img").alt = "e";
+
+	v.querySelector("#boxue #na").innerText = r.name;
+	v.querySelector("#boxue #ca").innerText = r.meta.categories.map((str) => capitalize(str)).join(", ");
+	v.querySelector("#boxue #de").innerText = r.author[0].split("<")[0];
+
+	for (let m of v.querySelectorAll(`#ave #to, #appcard > #de`)) {
+		for (let h of m.childNodes) {
+			if (h.id == undefined || h.className == undefined) {
+				h.remove();
+			}
+		}
+	}
+
+	for (let cu of v.querySelectorAll("#scr #img,#bucon,#spe ul,#chat")) {
+		cu.innerHTML = "";
+	}
+
+	v.querySelector("#appcard > #de").appendChild(document.createTextNode(r.description));
+
+	var af = document.createElement("a");
+	af.href = r.download.url;
+	af.innerText = "Download";
+	v.querySelector("#bucon").appendChild(af);
+
+	if (r.screenshots.length == 0) {
+		v.querySelector("#scr").style.display = "none";
+	} else {
+		v.querySelector("#scr").style = "display: block";
+		for (let g of r.screenshots) {
+			var h = document.createElement("img");
+			h.src = g;
+			h.onerror = (e) => {
+				e.target.remove();
+			};
+			v.querySelector("#scr #img").appendChild(h);
+		}
+	}
+
+	function creli(a, b) {
+		var u = document.createElement("li");
+		var x = document.createElement("div");
+		x.className = "a";
+		x.innerText = a;
+		u.appendChild(x);
+		var y = document.createElement("div");
+		y.className = "b";
+
+		if (typeof b === "string") {
+			y.innerText = b;
+		} else if (Array.isArray(b)) {
+			for (let ku of b) {
+				y.appendChild(ku);
+			}
+		} else {
+			console.log(b);
+			y.appendChild(b);
+		}
+		u.appendChild(y);
+		return u;
+	}
+
+	var ul = v.querySelector("#spe ul");
+
+	for (let uu of ["author", "maintainer"]) {
+		if (r[uu]) {
+			var bee;
+			if (r[uu][0].includes("<") && r[uu].length == 1) {
+				var uy = document.createElement("a");
+				let ye = r[uu][0].split("<")[1].split(">")[0];
+				if (r[uu][0].includes("@")) {
+					uy.href = "mailto:" + ye;
+				} else {
+					uy.href = ye;
+				}
+				uy.innerText = r[uu][0].split("<")[0];
+				bee = uy;
+			} else if (r[uu].length != 1) {
+				bee = [];
+				r[uu].forEach((e, i) => {
+					if (e.includes("<")) {
+						var uy = document.createElement("a");
+						let ye = e.split("<")[1].split(">")[0];
+						if (e.includes("@")) {
+							uy.href = "mailto:" + ye;
+						} else {
+							uy.href = ye;
+						}
+						uy.innerText = e.split("<")[0];
+						bee.push(uy);
+					} else {
+						bee.push(document.createTextNode(e));
+					}
+					if (i != r[uu].length - 1) bee.push(document.createTextNode(", "));
+				});
+			} else if (!r[uu][0].includes("<") && r[uu].length == 1) {
+				bee = r[uu][0];
+			}
+			var i = uu == "author" ? "Developers" : "Maintainers";
+			ul.appendChild(creli(i, bee));
+		}
+	}
+	for (let uu of ["website", "git_repo", "donation"]) {
+		if (r[uu]) {
+			var yy = document.createElement("a");
+			yy.innerText = r[uu];
+			yy.href = r[uu];
+			var i = "Repository";
+			switch (uu) {
+				case "website":
+				case "donation":
+					i = capitalize(uu);
+					break;
+			}
+			ul.appendChild(creli(i, yy));
+		}
+	}
+	if (last_check[r.slug]) {
+		ul.appendChild(creli("Version", last_check[r.slug]));
+	}
+	ul.appendChild(creli("Type", capitalize(r.type)));
+	if (r.locales) {
+		ul.appendChild(creli("Languages", r.locales.join(", ")));
+	}
+	ul.appendChild(creli("Anti-features", `Ads: ${r.has_ads}\n Tracking: ${r.has_tracking}`));
+	ul.appendChild(creli("License", r.license));
+	if (data.dl && data.dl[r.slug]) {
+		ul.appendChild(creli("Downloads", data.dl[r.slug].toString()));
+	}
+
+	if (data.ratings && data.ratings[r.slug]) {
+		let y = data.ratings[r.slug];
+		v.querySelector("#ra").style.display = "block";
+		v.querySelector("#ave #sco").innerText = y.average_rating.toFixed("1");
+		v.querySelector("#ave #stars").style = `--stars:${(y.average_rating / 5) * 100}%`;
+		v.querySelector("#ave #to").appendChild(document.createTextNode(`${y.rating_count} total`));
+		for (let b of v.querySelectorAll("#cha *")) {
+			b.style = "--to:0%";
+		}
+		getAppRatings(r.slug, (cb, err) => {
+			if (window.location.hash == "#" + r.slug && cb != "eroor404") {
+				[1, 2, 3, 4, 5].forEach((ar) => {
+					let a = cb.ratings.filter((a) => a.points == ar).length;
+					v.querySelector(`#appcard [data-r="${ar}"]`).style = `--to:${(a / y.rating_count) * 100}%`;
+				});
+				let k = v.querySelector("#chat");
+				for (let o of cb.ratings) {
+					var p = document.createElement("div");
+					var q = document.createElement("div");
+					q.className = "tie";
+					q.appendChild(document.createTextNode(`@${truncate(o.username, 14)}`));
+					var stars = document.createElement("div");
+					stars.id = "stars";
+					stars.style = `--stars:${(o.points / 5) * 100}%`;
+					q.appendChild(stars);
+					q.appendChild(document.createTextNode(new Date(o.creationtime * 1000).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })));
+					p.appendChild(q);
+					p.appendChild(document.createTextNode(o.description));
+					k.appendChild(p);
+				}
+			} else return;
+		});
+	} else {
+		v.querySelector("#ra").style.display = "none";
+	}
+
+	document.getElementById("cards").style = "opacity:1;visibility:visible";
+	document.getElementById("appcard").style = "transform:translate(50%, -50%)";
+	info_open = true;
+
+	document.querySelector("#appcard .close").addEventListener("click", function cliky() {
+		document.querySelector("#appcard .close").removeEventListener("click", cliky);
+		info_open = false;
+		window.location.hash = "";
+		document.getElementById("cards").removeAttribute("style");
+		document.getElementById("appcard").removeAttribute("style");
+		document.body.style.overflow = "auto";
+	});
 }
 
-/*
-async function dlCountApp(appSlug) {
-	return await fetch(`${ratings}/download_counter/`);
+function getAppRatings(appID, cb) {
+	fetch(`${ratings}/ratings/${appID}`)
+		.then((response) => response.json())
+		.then((response) => cb(response))
+		.catch((e) => cb("eroor404", e));
 }
 
-//works needs a few fixes but it works
-async function getAppRatings(appID) {
-	const rawRatings = await fetch(`${ratings}/ratings/${appID}`);
-	if (!rawRatings.ok) throw new Error(`Unable to fetch ratings for app ${appID}.`);
-	return await rawRatings.json();
-}
-*/
 const capitalize = ([first, ...rest], locale = navigator.language) => first.toLocaleUpperCase(locale) + rest.join("");
 
 const truncate = (n, t) => {

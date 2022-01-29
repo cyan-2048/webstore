@@ -6,8 +6,11 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>webstore alpha</title>
 		<script src="index.js"></script>
-		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous" />
-		<link rel="stylesheet" href="style.css" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+		<link rel="stylesheet" href="./css/style.css" />
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet"> 
 	</head>
 	<body>
 		<div id="splash">
@@ -26,10 +29,10 @@
 					<option value="cab">Categorical</option>
 				</select>
 				<sel id="sort" tabindex="0">
-					<cho value="abc"><i class="fas fa-sort-alpha-down"></i>&nbsp;&nbsp;Alphabetical</cho>
+					<cho value="abc"><i class="fas fa-sort-alpha-down"></i>Alphabetical</cho>
 					<drop>
-						<opt value="abc"><i class="fas fa-sort-alpha-down"></i>&nbsp;&nbsp;Alphabetical</opt>
-						<opt value="cab"><i class="fas fa-tags"></i>&nbsp;&nbsp;Categorical</opt>
+						<opt value="abc"><i class="fas fa-sort-alpha-down"></i>Alphabetical</opt>
+						<opt value="cab"><i class="fas fa-tags"></i>Categorical</opt>
 					</drop>
 				</sel>
 
@@ -49,29 +52,48 @@
 			<div id="appcard">
 				<div class="close"><i class="fas fa-times"></i></div>
 				<div id="head">
-					<img src="banana.png" alt="" />
+					<img/>
 					<div id="boxue">
-						<div id="na">Banana</div>
-						<div id="ca">Food</div>
-						<div id="de">God? Evolution? Earth? idk</div>
+						<div id="na"></div>
+						<div id="ca"></div>
+						<div id="de"></div>
 					</div>
 				</div>
+				<div id="bucon"></div>
 				<div id="de">
 					<div class="ti">Description</div>
-					A banana is an elongated, edible fruit – botanically a berry – produced by several kinds of large herbaceous flowering plants in the genus Musa. In some countries, bananas used for cooking
-					may be called "plantains", distinguishing them from dessert bananas.
 				</div>
 				<div id="scr">
 					<div class="ti">Screenshots</div>
-					<div id="img">
-						<img src="https://banana-hackers.gitlab.io/store-db/icons/airshipcombat3d/screenshot0.png" alt="" />
-						<img src="https://banana-hackers.gitlab.io/store-db/icons/airshipcombat3d/screenshot0.png" alt="" />
-						<img src="https://banana-hackers.gitlab.io/store-db/icons/airshipcombat3d/screenshot0.png" alt="" />
-						<img src="https://banana-hackers.gitlab.io/store-db/icons/airshipcombat3d/screenshot0.png" alt="" />
-					</div>
+					<div id="img"></div>
 				</div>
 				<div id="spe">
 					<div class="ti">Specifications</div>
+					<ul>
+					</ul>
+				</div>
+				<div id="qr">
+					<div class="ti">QR Code for on-device client</div>
+				</div>
+				<div id="ra">
+					<div class="ti">Ratings</div>
+					<div id="rabox">
+						<div id="ave">
+							<div id="sco"></div>
+							<div id="stars"></div>
+							<div id="to"><i class="fas fa-user"></i></div>
+						</div>
+						<div id="cha">
+							<div data-r="5"></div>
+							<div data-r="4"></div>
+							<div data-r="3"></div>
+							<div data-r="2"></div>
+							<div data-r="1"></div>
+						</div>
+					</div>
+					<div id="chat"></div>
+
+					</div>
 				</div>
 			</div>
 		</div>

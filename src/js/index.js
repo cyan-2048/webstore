@@ -233,12 +233,12 @@ const init = (e) => {
 	}
 
 	if (e != undefined) {
-		window.location.hash = "";
+		location.hash = "";
 	} else {
 		document.querySelector("#splash #image").className = "loaded";
 		document.getElementById("splash").style = "opacity: 0; visibility: hidden";
 	}
-	if (window.location.hash != "") hashManager(undefined);
+	if (location.hash != "") hashManager(undefined);
 	document.getElementById("le").innerText = document.querySelectorAll(`[data-sel="app"] + #apps .app`).length;
 };
 
@@ -301,7 +301,7 @@ document.onclick = (e) => {
 		x.setAttribute("value", e.target.getAttribute("value"));
 		sort(e);
 	} else if (e.target.className == "share") {
-		clipboard(window.location.origin + "/#" + e.target.parentElement.parentElement.dataset.slug);
+		clipboard(location.origin + "/#" + e.target.parentElement.parentElement.dataset.slug);
 	} else if (e.target.id == "scrollup") {
 		document.body.scrollTo({ top: 0, behavior: "smooth" });
 	} else if (e.target.id == "cards") {
@@ -352,11 +352,11 @@ window.onhashchange = hashManager;
 var info_open = false;
 
 function hashManager(e) {
-	let hash = window.location.hash.split("#")[1];
+	let hash = location.hash.split("#")[1];
 	let a = document.querySelector(`.app[data-slug="${hash}"]`);
 	var c = 200;
 	if (document.querySelector("#category").dataset.sel == "app") c = 0;
-	if (a != null && window.location.hash != "") {
+	if (a != null && location.hash != "") {
 		if (e == undefined) document.querySelector("button[data-name=app]").click();
 		setTimeout(() => {
 			const rect = a.getBoundingClientRect();
@@ -369,7 +369,7 @@ function hashManager(e) {
 		}, c);
 	}
 
-	if (info_open && window.location.hash == "") {
+	if (info_open && location.hash == "") {
 		document.querySelector("#appcard .close").click();
 		return;
 	}
@@ -460,6 +460,7 @@ function hashManager(e) {
 				} else {
 					uy.href = ye;
 				}
+				uy.target = "_blank";
 				uy.innerText = r[uu][0].split("<")[0];
 				bee = uy;
 			} else if (r[uu].length != 1) {
@@ -474,6 +475,7 @@ function hashManager(e) {
 							uy.href = ye;
 						}
 						uy.innerText = e.split("<")[0];
+						uy.target = "_blank";
 						bee.push(uy);
 					} else {
 						bee.push(document.createTextNode(e));
@@ -491,6 +493,7 @@ function hashManager(e) {
 		if (r[uu]) {
 			var yy = document.createElement("a");
 			yy.innerText = r[uu];
+			yy.target = "_blank";
 			yy.href = r[uu];
 			var i = "Repository";
 			switch (uu) {
@@ -510,7 +513,21 @@ function hashManager(e) {
 		ul.appendChild(creli("Languages", r.locales.join(", ")));
 	}
 	ul.appendChild(creli("Anti-features", `Ads: ${r.has_ads}\n Tracking: ${r.has_tracking}`));
-	ul.appendChild(creli("License", r.license));
+
+	if (r.license) {
+		var bee;
+		if (r.license.includes("<")) {
+			var uy = document.createElement("a");
+			let ye = r.license.split("<")[1].split(">")[0];
+			uy.href = ye;
+			uy.innerText = r.license.split("<")[0];
+			uy.target = "_blank";
+			bee = uy;
+		} else {
+			bee = r.license;
+		}
+		ul.appendChild(creli("License", bee));
+	}
 	if (data.dl && data.dl[r.slug]) {
 		ul.appendChild(creli("Downloads", data.dl[r.slug].toString()));
 	}
@@ -525,7 +542,7 @@ function hashManager(e) {
 			b.style = "--to:0%";
 		}
 		getAppRatings(r.slug, (cb, err) => {
-			if (window.location.hash == "#" + r.slug && cb != "eroor404") {
+			if (location.hash == "#" + r.slug && cb != "eroor404") {
 				[1, 2, 3, 4, 5].forEach((ar) => {
 					let a = cb.ratings.filter((a) => a.points == ar).length;
 					v.querySelector(`#appcard [data-r="${ar}"]`).style = `--to:${(a / y.rating_count) * 100}%`;
@@ -558,7 +575,7 @@ function hashManager(e) {
 	document.querySelector("#appcard .close").addEventListener("click", function cliky() {
 		document.querySelector("#appcard .close").removeEventListener("click", cliky);
 		info_open = false;
-		window.location.hash = "";
+		location.hash = "";
 		document.getElementById("cards").removeAttribute("style");
 		document.getElementById("appcard").removeAttribute("style");
 		document.body.style.overflow = "auto";

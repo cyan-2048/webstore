@@ -839,3 +839,9 @@ img[alt] {
 	position: relative;
 	pointer-events: auto;
 }
+
+#qrcode,
+#qr {
+	width: 120px;
+	height: 120px;
+}

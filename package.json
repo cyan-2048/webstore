@@ -1,7 +1,6 @@
 {
 	"name": "webstore",
 	"source": "src/index.html",
-	"browserslist": "Firefox > 47",
 	"scripts": {
 		"start": "parcel --open --no-source-maps --dist-dir dev",
 		"build": "parcel build --no-source-maps --dist-dir docs"

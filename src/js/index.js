@@ -1,8 +1,8 @@
-new_versions = {};
 last_check = localStorage.versions != undefined ? (last_check = JSON.parse(localStorage.versions)) : (last_check = { non_existed: 1.0 });
 proxy = localStorage.proxy != undefined ? (proxy = JSON.parse(localStorage.proxy)) : (proxy = "https://api.allorigins.win/raw?url=");
 ratings = localStorage.ratings != undefined ? (ratings = JSON.parse(localStorage.ratings)) : (ratings = "https://bhackers.uber.space/srs/v1");
 database = localStorage.database != undefined ? (database = JSON.parse(localStorage.database)) : (database = "https://banana-hackers.gitlab.io/store-db/data.json");
+new_versions = {};
 
 (() => {
 	index = 0;
@@ -28,7 +28,6 @@ database = localStorage.database != undefined ? (database = JSON.parse(localStor
 	update = () => {
 		let ef = data.apps[index];
 		function res(r) {
-			console.log("works");
 			if (last_check[ef.slug] && last_check[ef.slug] != r.version) {
 				new_versions[ef.slug] = { from: last_check[ef.slug], to: r.version };
 			}
@@ -52,7 +51,7 @@ const database_init = () => {
 	fetch(database)
 		.then((response) => response.json())
 		.catch((e) => {
-			console.log(e);
+			console.error(e);
 			alert("can't download database please reload the page");
 		})
 		.then((response) => {
@@ -85,7 +84,7 @@ const database_init = () => {
 					}
 				})
 				.catch((e) => {
-					console.log(e);
+					console.error(e);
 					alert("can't download download counts, store will not have download count functionality");
 				})
 				.then(() => {
@@ -107,7 +106,7 @@ const database_init = () => {
 							}
 						})
 						.catch((e) => {
-							console.log(e);
+							console.error(e);
 							alert("can't download download ratings, store will not have ratings functionality");
 						});
 				});
@@ -440,7 +439,6 @@ function hashManager(e) {
 				y.appendChild(ku);
 			}
 		} else {
-			console.log(b);
 			y.appendChild(b);
 		}
 		u.appendChild(y);

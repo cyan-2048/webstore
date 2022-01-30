@@ -840,8 +840,8 @@ img[alt] {
 	pointer-events: auto;
 }
 
-#qrcode,
-#qr {
+#qrcode {
 	width: 120px;
 	height: 120px;
+	padding: 4px;
 }

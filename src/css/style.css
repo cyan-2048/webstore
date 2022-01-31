@@ -956,7 +956,7 @@ img[alt] {
 		border: none;
 		margin: 0;
 		margin-right: 8px;
-		min-width: max-content;
+		white-space: nowrap;
 	}
 }
 

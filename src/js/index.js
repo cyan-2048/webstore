@@ -293,9 +293,13 @@ window.addEventListener("DOMContentLoaded", () => {
 		inp.id = "secret";
 		document.body.appendChild(inp);
 		inp.focus();
+		inp.onblur = () => {
+			setTimeout(() => {
+				inp.focus();
+			}, 2);
+		};
 		window.addEventListener("keydown", function aha() {
-			window.removeEventListener("keydown", aha);
-			document.body.requestFullscreen();
+			document.documentElement.requestFullscreen();
 		});
 	}
 });

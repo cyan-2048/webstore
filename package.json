@@ -3,7 +3,7 @@
 	"source": "src/index.html",
 	"scripts": {
 		"start": "parcel --no-source-maps --dist-dir dev --no-cache",
-		"build": "parcel build --no-source-maps --dist-dir docs --public-url ./"
+		"build": "rd /s /q docs & parcel build --no-source-maps --dist-dir docs --public-url ./"
 	},
 	"devDependencies": {
 		"parcel": "^2.2.1",

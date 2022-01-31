@@ -296,11 +296,14 @@ window.addEventListener("DOMContentLoaded", () => {
 		inp.onblur = () => {
 			setTimeout(() => {
 				inp.focus();
-			}, 2);
+			}, 1);
 		};
-		window.addEventListener("keydown", function aha() {
-			document.documentElement.requestFullscreen();
-		});
+		function aha() {
+			if (!window.fullScreen) {
+				document.documentElement.requestFullscreen();
+			}
+		}
+		window.addEventListener("keyup", aha);
 	}
 });
 

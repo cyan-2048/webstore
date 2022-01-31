@@ -843,5 +843,125 @@ img[alt] {
 #qrcode {
 	width: 120px;
 	height: 120px;
-	padding: 4px;
+	padding: 10px;
+	background-color: white;
+}
+
+@media only screen and (max-width: 320px) {
+	#splash #image {
+		transform: translate(50%, -50%) scale(0.5);
+	}
+	#bar1,
+	#bar2 {
+		display: none;
+	}
+	#apps #container {
+		padding: 0;
+		padding-top: 5px;
+		height: calc(100vh - 78px);
+		overflow: scroll;
+	}
+	.header img {
+		width: 32px !important;
+		height: 32px !important;
+		margin-top: 5px;
+	}
+	.app {
+		font-size: 0;
+		padding: 5px 10px !important;
+		padding-bottom: 8px !important;
+		margin: 5px !important;
+		margin-top: 0 !important;
+	}
+	.app.selected {
+		outline: var(--accent) solid 3px;
+	}
+	#appcard .close {
+		display: none;
+	}
+	#appcard {
+		overflow: hidden !important;
+		overflow-y: scroll !important;
+		padding: 10px !important;
+		height: calc(100vh - 30px) !important;
+		top: 45% !important;
+		border-radius: 2px !important;
+	}
+	#appcard #img {
+		height: 100px;
+	}
+	#appcard #img img {
+		height: 95%;
+	}
+	#appcard #head #na {
+		font-size: 18px !important;
+		line-height: 1 !important;
+	}
+	#head #ca,
+	#head #de {
+		font-size: 16px !important;
+		line-height: 1 !important;
+	}
+	#head #de {
+		font-size: 13px !important;
+	}
+	#spe,
+	#scr,
+	#appcard > #de {
+		margin-bottom: 15px !important;
+	}
+	#appcard > #de {
+		margin-top: 15px !important;
+	}
+	#appcard #bucon {
+		display: none !important;
+	}
+	#appcard #head img {
+		width: 30px !important;
+		height: 30px !important;
+	}
+	#spe li {
+		margin: 5px 0 !important;
+	}
+	#spe ul li .a {
+		width: 43% !important;
+	}
+	.app .header {
+		margin: 0 !important;
+	}
+	#cha {
+		display: none;
+	}
+	#ave {
+		width: unset !important;
+		height: unset !important;
+	}
+	#rabox {
+		justify-content: center;
+	}
+	#category {
+		padding: 8px !important;
+		height: 48px !important;
+		flex-wrap: nowrap !important;
+		justify-content: unset !important;
+		overflow: hidden;
+		overflow-x: scroll;
+	}
+	#category button {
+		height: 32px;
+		padding: 0 12px;
+		font-weight: normal;
+		font-size: 14px;
+		border-radius: 4px;
+		border: none;
+		margin: 0;
+		margin-right: 8px;
+		min-width: max-content;
+	}
+}
+
+#secret {
+	opacity: 0;
+	position: fixed;
+	top: -100vh;
 }

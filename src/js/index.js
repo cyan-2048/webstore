@@ -3,6 +3,8 @@ proxy = localStorage.proxy != undefined ? (proxy = JSON.parse(localStorage.proxy
 ratings = localStorage.ratings != undefined ? (ratings = JSON.parse(localStorage.ratings)) : (ratings = "https://bhackers.uber.space/srs/v1");
 database = localStorage.database != undefined ? (database = JSON.parse(localStorage.database)) : (database = "https://banana-hackers.gitlab.io/store-db/data.json");
 new_versions = {};
+isKai = navigator.userAgent.toLocaleLowerCase().includes("kaios");
+qr_prefix = localStorage.qr_prefix != undefined ? (qr_prefix = JSON.parse(localStorage.qr_prefix)) : (qr_prefix = "bhacker:");
 
 (() => {
 	index = 0;
@@ -47,7 +49,7 @@ new_versions = {};
 	};
 })();
 
-const database_init = () => {
+var database_init = () => {
 	fetch(database)
 		.then((response) => response.json())
 		.catch((e) => {
@@ -115,7 +117,7 @@ const database_init = () => {
 
 database_init();
 
-const init = (e) => {
+var init = (e) => {
 	var p = e == undefined ? "app" : document.querySelector("#category .selected").dataset.name;
 	document.getElementById("category").innerHTML = "<style></style>";
 	var cats = [];
@@ -199,30 +201,28 @@ const init = (e) => {
 		sp.className = "spacer";
 		b.appendChild(sp);
 
-		var j = document.createElement("a");
-		j.className = "info";
-		j.innerHTML = `<i class="fas fa-info-circle"></i> Info`;
-		j.href = `#${a.slug}`;
-		var c = document.createElement("a");
-		c.href = a.download.url;
-		c.innerHTML = `<i class="fas fa-file-download"></i> Download`;
+		if (!isKai) {
+			var j = document.createElement("a");
+			j.className = "info";
+			j.innerHTML = `<i class="fas fa-info-circle"></i> Info`;
+			j.href = `#${a.slug}`;
+			var c = document.createElement("a");
+			c.href = a.download.url;
+			c.innerHTML = `<i class="fas fa-file-download"></i> Download`;
 
-		var k = null;
-		if (!navigator.userAgent.toLocaleLowerCase().includes("kaios")) {
-			k = document.createElement("button");
+			var k = document.createElement("button");
 			k.className = "share";
 			k.innerHTML = `<i class="far fa-clipboard"></i> Share`;
+
+			var bcn = document.createElement("div");
+			bcn.className = "bucon";
+
+			bcn.appendChild(j);
+			bcn.appendChild(c);
+			bcn.appendChild(k);
+
+			b.appendChild(bcn);
 		}
-
-		var bcn = document.createElement("div");
-		bcn.className = "bucon";
-
-		bcn.appendChild(j);
-		bcn.appendChild(c);
-		if (k != null) bcn.appendChild(k);
-
-		b.appendChild(bcn);
-
 		b.className = "app";
 		b.dataset.slug = a.slug;
 		for (let d of a.meta.categories) {
@@ -244,7 +244,7 @@ const init = (e) => {
 var lastScroll = 0;
 
 window.addEventListener("DOMContentLoaded", () => {
-	let a = navigator.userAgent.toLocaleLowerCase().includes("kaios") ? document.querySelector("sel") : document.querySelector("select");
+	let a = isKai ? document.querySelector("sel") : document.querySelector("select");
 	a.remove();
 	if (document.getElementById("sort").tagName == "SELECT") {
 		document.getElementById("sort").onchange = sort;
@@ -261,7 +261,7 @@ window.addEventListener("DOMContentLoaded", () => {
 		document.getElementById("le").innerText = document.querySelectorAll(`[data-sel="${t.dataset.name}"] + #apps .${t.dataset.name}`).length;
 	};
 
-	if (!navigator.userAgent.toLocaleLowerCase().includes("kaios")) {
+	if (!isKai) {
 		var c = document.createElement("button");
 		c.id = "scrollup";
 		var i = document.createElement("i");
@@ -285,6 +285,18 @@ window.addEventListener("DOMContentLoaded", () => {
 				}
 			});
 		}
+	} else {
+		var inp = document.createElement("input");
+		inp.max = 1;
+		inp.type = "number";
+		inp.maxLength = 0;
+		inp.id = "secret";
+		document.body.appendChild(inp);
+		inp.focus();
+		window.addEventListener("keydown", function aha() {
+			window.removeEventListener("keydown", aha);
+			document.body.requestFullscreen();
+		});
 	}
 });
 
@@ -358,8 +370,8 @@ function hashManager(e) {
 	if (a != null && location.hash != "") {
 		if (e == undefined) document.querySelector("button[data-name=app]").click();
 		setTimeout(() => {
-			const rect = a.getBoundingClientRect();
-			const elY = rect.top - document.body.getBoundingClientRect().top + rect.height / 2;
+			var rect = a.getBoundingClientRect();
+			var elY = rect.top - document.body.getBoundingClientRect().top + rect.height / 2;
 			document.body.scrollBy({
 				left: 0,
 				top: elY - window.innerHeight / 2,
@@ -398,7 +410,7 @@ function hashManager(e) {
 		}
 	}
 
-	for (let cu of v.querySelectorAll("#scr #img,#bucon,#spe ul,#chat")) {
+	for (let cu of v.querySelectorAll("#scr #img,#bucon,#spe ul,#chat,#qrcode")) {
 		cu.innerHTML = "";
 	}
 
@@ -443,6 +455,27 @@ function hashManager(e) {
 		}
 		u.appendChild(y);
 		return u;
+	}
+
+	function qr_gen(t, e) {
+		var l = qrjs(t),
+			r = document.createElement("canvas");
+		(r.width = e), (r.height = e);
+		for (var a = r.getContext("2d"), h = l.modules, n = e / h.length, o = e / h.length, f = 0; f < h.length; ++f)
+			for (var c = h[f], i = 0; i < c.length; ++i) {
+				a.fillStyle = c[i] ? "#000" : "#fff";
+				var d = Math.ceil((i + 1) * n) - Math.floor(i * n),
+					g = Math.ceil((f + 1) * o) - Math.floor(f * o);
+				a.fillRect(Math.round(i * n), Math.round(f * o), d, g);
+			}
+		return r;
+	}
+
+	if (isKai) {
+		v.querySelector("#qr").style.display = "none";
+	} else {
+		v.querySelector("#qr").style.display = "block";
+		v.querySelector("#qrcode").appendChild(qr_gen(qr_prefix + r.slug, 100));
 	}
 
 	var ul = v.querySelector("#spe ul");
@@ -541,21 +574,30 @@ function hashManager(e) {
 		}
 		getAppRatings(r.slug, (cb, err) => {
 			if (location.hash == "#" + r.slug && cb != "eroor404") {
-				[1, 2, 3, 4, 5].forEach((ar) => {
-					let a = cb.ratings.filter((a) => a.points == ar).length;
-					v.querySelector(`#appcard [data-r="${ar}"]`).style = `--to:${(a / y.rating_count) * 100}%`;
-				});
+				if (!isKai) {
+					[1, 2, 3, 4, 5].forEach((ar) => {
+						let a = cb.ratings.filter((a) => a.points == ar).length;
+						v.querySelector(`#appcard [data-r="${ar}"]`).style = `--to:${(a / y.rating_count) * 100}%`;
+					});
+				}
 				let k = v.querySelector("#chat");
 				for (let o of cb.ratings) {
 					var p = document.createElement("div");
 					var q = document.createElement("div");
 					q.className = "tie";
-					q.appendChild(document.createTextNode(`@${truncate(o.username, 14)}`));
-					var stars = document.createElement("div");
-					stars.id = "stars";
-					stars.style = `--stars:${(o.points / 5) * 100}%`;
-					q.appendChild(stars);
-					q.appendChild(document.createTextNode(new Date(o.creationtime * 1000).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })));
+					var tr = 14;
+					if (isKai) tr = 6;
+					q.appendChild(document.createTextNode(`@${truncate(o.username, tr)}`));
+					if (!isKai) {
+						var stars = document.createElement("div");
+						stars.id = "stars";
+						stars.style = `--stars:${(o.points / 5) * 100}%`;
+						q.appendChild(stars);
+						q.appendChild(document.createTextNode(new Date(o.creationtime * 1000).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })));
+					} else {
+						q.appendChild(document.createTextNode(`\u00A0\u00A0 ${o.points} ★ \u00A0\u00A0`));
+						q.appendChild(document.createTextNode(new Date(o.creationtime * 1000).toLocaleDateString()));
+					}
 					p.appendChild(q);
 					p.appendChild(document.createTextNode(o.description));
 					k.appendChild(p);
@@ -587,9 +629,9 @@ function getAppRatings(appID, cb) {
 		.catch((e) => cb("eroor404", e));
 }
 
-const capitalize = ([first, ...rest], locale = navigator.language) => first.toLocaleUpperCase(locale) + rest.join("");
+var capitalize = ([first, ...rest], locale = navigator.language) => first.toLocaleUpperCase(locale) + rest.join("");
 
-const truncate = (n, t) => {
+var truncate = (n, t) => {
 	return n.length > t ? n.substr(0, t - 1) + "…" : n;
 };
 

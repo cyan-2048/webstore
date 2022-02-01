@@ -237,9 +237,9 @@ var init = (e) => {
 		document.querySelector("#splash #image").className = "loaded";
 		document.getElementById("splash").style = "opacity: 0; visibility: hidden";
 	}
-	if (location.hash != "") hashManager(undefined);
 	if (!isKai) document.getElementById("le").innerText = document.querySelectorAll(`[data-sel="app"] + #apps .app:not(.hidden)`).length;
 	else document.querySelector(".app").classList.add("selected");
+	if (location.hash != "") hashManager(undefined);
 };
 
 var lastScroll = 0;
@@ -259,7 +259,17 @@ window.addEventListener("DOMContentLoaded", () => {
 			k.removeAttribute("class");
 		}
 		t.className = "selected";
-		document.getElementById("le").innerText = document.querySelectorAll(`[data-sel="${t.dataset.name}"] + #apps .${t.dataset.name}:not(.hidden)`).length;
+		let a = document.querySelectorAll(`[data-sel="${t.dataset.name}"] + #apps .${t.dataset.name}:not(.hidden)`);
+		document.getElementById("le").innerText = a.length;
+		if (isKai) {
+			document.querySelector(".app.selected").classList.remove("selected");
+			a[0].classList.add("selected");
+			setTimeout(() => {
+				let e = document.querySelector("#category button.selected").getBoundingClientRect(),
+					t = e.left - document.body.getBoundingClientRect().left + e.width / 2;
+				document.getElementById("category").scrollBy({ top: 0, left: t - window.innerWidth / 2, behavior: "smooth" });
+			}, 0);
+		}
 	};
 
 	if (!isKai) {
@@ -325,12 +335,21 @@ window.addEventListener("DOMContentLoaded", () => {
 		}
 		window.addEventListener("keyup", aha);
 		window.onkeydown = (e) => {
-			let k = e.key;
-			let a = document.querySelector("#apps .app.selected");
 			e.preventDefault();
+			function isInViewport(n) {
+				let t = n.getBoundingClientRect();
+				return t.top >= 0 && t.left >= 0 && t.bottom <= window.innerHeight - 30 && t.right <= window.innerWidth;
+			}
+			let k = e.key;
 			let c = document.getElementById("barcontainer").dataset.sel;
 			let array = Array.from(document.querySelectorAll(`[data-sel="${c}"] + #apps div.${c}:not(.hidden)`));
-			let index = array.indexOf(a);
+			let index = array.indexOf(document.querySelector("#apps .app.selected"));
+			let array1 = Array.from(document.getElementById("category").children);
+			let index1 = array1.indexOf(document.querySelector("#category button.selected"));
+			let array2 = Array.from(document.querySelectorAll("#appcard a,#img img:first-child")).filter((e) => isInViewport(e));
+			let index2 = array2.indexOf(document.querySelector("#appcard .selected"));
+			let index3 = Array.from(document.querySelectorAll("#appcard a,#img img")).indexOf(document.querySelector("#appcard .selected"));
+
 			if (index != -1) {
 				switch (k) {
 					case "ArrowDown":
@@ -345,12 +364,113 @@ window.addEventListener("DOMContentLoaded", () => {
 							array[index - 1].classList.add("selected");
 						}
 						break;
+					case "Backspace":
+						location = "about:blank";
+						break;
+					case "ArrowLeft":
+						if (index1 != 0) {
+							array1[index1 - 1].click();
+						}
+						break;
+					case "ArrowRight":
+						if (index1 != array1.length - 1) {
+							array1[index1 + 1].click();
+						}
+						break;
+					case "Enter":
+						location.hash = "#" + document.querySelector("#apps .app.selected").dataset.slug;
+						return;
+						break;
 				}
 				setTimeout(() => {
 					let t = document.querySelector("#apps .app.selected").getBoundingClientRect(),
 						e = t.top - document.body.getBoundingClientRect().top + t.height / 2;
 					document.getElementById("container").scrollBy({ left: 0, top: e - window.innerHeight / 2, behavior: "smooth" });
 				}, 0);
+			} else if (location.hash != "") {
+				if (index3 != -1) {
+					let ac = document.getElementById("appcard");
+					switch (k) {
+						case "ArrowDown":
+							ac.scrollBy({ left: 0, top: 70, behavior: "smooth" });
+							break;
+						case "ArrowUp":
+							ac.scrollBy({ left: 0, top: -70, behavior: "smooth" });
+							break;
+					}
+				}
+				if (index2 != -1) {
+					let v = () => document.querySelectorAll("#appcard .selected").forEach((e) => e.classList.remove("selected"));
+					switch (k) {
+						case "ArrowUp":
+							if (index2 != 0) {
+								v();
+								array2[index2 - 1].classList.add("selected");
+							}
+							break;
+						case "ArrowDown":
+							if (index2 != array2.length - 1) {
+								v();
+								array2[index2 + 1].classList.add("selected");
+							}
+							break;
+					}
+				} else {
+					if (array2.length > 0 && k.match(/ArrowUp|ArrowDown/g)) {
+						document.querySelectorAll("#appcard .selected").forEach((e) => e.classList.remove("selected"));
+						array2[0].classList.add("selected");
+					}
+				}
+
+				if (document.querySelector("#appcard .selected").tagName == "IMG") {
+					let b = () => document.querySelectorAll("#appcard .selected").forEach((e) => e.classList.remove("selected"));
+					let arr = Array.from(document.querySelectorAll("#img img"));
+					let ind = arr.indexOf(document.querySelector("#appcard .selected"));
+					let c = () => {
+						setTimeout(() => {
+							let e = document.querySelector("#appcard .selected").getBoundingClientRect(),
+								t = e.left - document.body.getBoundingClientRect().left + e.width / 2;
+							document.getElementById("img").scrollBy({ top: 0, left: t - window.innerWidth / 2, behavior: "smooth" });
+						}, 0);
+					};
+					let d = () => {
+						let v = document.getElementById("scrp"),
+							po = document.querySelector("#appcard img.selected");
+						if (v.className == "full" && po) v.src = po.src;
+					};
+					switch (k) {
+						case "ArrowRight":
+							if (ind != arr.length - 1) {
+								b();
+								arr[ind + 1].classList.add("selected");
+								c();
+								d();
+							}
+							break;
+						case "ArrowLeft":
+							if (ind != 0) {
+								b();
+								arr[ind - 1].classList.add("selected");
+								c();
+								d();
+							}
+							break;
+						case "Enter":
+						case "Backspace":
+							if (k == "Backspace" && document.getElementById("scrp").className == "") {
+								location.hash = "";
+								return;
+							}
+							document.getElementById("scrp").classList.toggle("full");
+							d();
+							break;
+					}
+				} else {
+					document.getElementById("img").scrollTo({ left: 0 });
+					if (k == "Backspace") {
+						location.hash = "";
+					}
+				}
 			}
 		};
 	}
@@ -419,6 +539,19 @@ window.onhashchange = hashManager;
 var info_open = false;
 
 function hashManager(e) {
+	if (isKai && location.hash == "") {
+		document.querySelector("#appcard .selected").classList.remove("selected");
+		document.getElementById("cards").removeAttribute("style");
+		document.getElementById("appcard").removeAttribute("style");
+		document.body.style.overflow = "auto";
+		document.querySelector(`[data-slug='${e.oldURL.split("#")[1]}']`).classList.add("selected");
+		setTimeout(() => {
+			let t = document.querySelector("#apps .app.selected").getBoundingClientRect(),
+				e = t.top - document.body.getBoundingClientRect().top + t.height / 2;
+			document.getElementById("container").scrollBy({ left: 0, top: e - window.innerHeight / 2, behavior: "smooth" });
+		}, 0);
+		return;
+	}
 	let hash = location.hash.split("#")[1];
 	let a = document.querySelector(`.app[data-slug="${hash}"]`);
 	var c = 200;
@@ -435,29 +568,23 @@ function hashManager(e) {
 			});
 		}, c);
 	}
-
 	if (info_open && location.hash == "") {
 		document.querySelector("#appcard .close").click();
 		return;
 	}
-
 	let r = data.apps.find((o) => {
 		return o.slug == hash;
 	});
-
 	if (r == undefined) return;
-
 	document.body.style.overflow = "hidden";
 	let v = document.getElementById("appcard");
-
+	v.scrollTo({ top: 0 });
 	v.querySelector("#head img").src = "";
 	v.querySelector("#head img").src = r.icon;
 	v.querySelector("#head img").alt = "e";
-
 	v.querySelector("#boxue #na").innerText = r.name;
 	v.querySelector("#boxue #ca").innerText = r.meta.categories.map((str) => capitalize(str)).join(", ");
 	v.querySelector("#boxue #de").innerText = r.author[0].split("<")[0];
-
 	for (let m of v.querySelectorAll(`#ave #to, #appcard > #de`)) {
 		for (let h of m.childNodes) {
 			if (h.id == undefined || h.className == undefined) {
@@ -465,18 +592,14 @@ function hashManager(e) {
 			}
 		}
 	}
-
 	for (let cu of v.querySelectorAll("#scr #img,#bucon,#spe ul,#chat,#qrcode")) {
 		cu.innerHTML = "";
 	}
-
 	v.querySelector("#appcard > #de").appendChild(document.createTextNode(r.description));
-
 	var af = document.createElement("a");
 	af.href = r.download.url;
 	af.innerText = "Download";
 	v.querySelector("#bucon").appendChild(af);
-
 	if (r.screenshots.length == 0) {
 		v.querySelector("#scr").style.display = "none";
 	} else {
@@ -490,7 +613,6 @@ function hashManager(e) {
 			v.querySelector("#scr #img").appendChild(h);
 		}
 	}
-
 	function creli(a, b) {
 		var u = document.createElement("li");
 		var x = document.createElement("div");
@@ -499,7 +621,6 @@ function hashManager(e) {
 		u.appendChild(x);
 		var y = document.createElement("div");
 		y.className = "b";
-
 		if (typeof b === "string") {
 			y.innerText = b;
 		} else if (Array.isArray(b)) {
@@ -512,7 +633,6 @@ function hashManager(e) {
 		u.appendChild(y);
 		return u;
 	}
-
 	function qr_gen(t, e) {
 		var l = qrjs(t),
 			r = document.createElement("canvas");
@@ -526,16 +646,13 @@ function hashManager(e) {
 			}
 		return r;
 	}
-
 	if (isKai) {
 		v.querySelector("#qr").style.display = "none";
 	} else {
 		v.querySelector("#qr").style.display = "block";
 		v.querySelector("#qrcode").appendChild(qr_gen(qr_prefix + r.slug, 100));
 	}
-
 	var ul = v.querySelector("#spe ul");
-
 	for (let uu of ["author", "maintainer"]) {
 		if (r[uu]) {
 			var bee;
@@ -600,7 +717,6 @@ function hashManager(e) {
 		ul.appendChild(creli("Languages", r.locales.join(", ")));
 	}
 	ul.appendChild(creli("Anti-features", `Ads: ${r.has_ads}\n Tracking: ${r.has_tracking}`));
-
 	if (r.license) {
 		var bee;
 		if (r.license.includes("<")) {
@@ -618,7 +734,6 @@ function hashManager(e) {
 	if (data.dl && data.dl[r.slug]) {
 		ul.appendChild(creli("Downloads", data.dl[r.slug].toString()));
 	}
-
 	if (data.ratings && data.ratings[r.slug]) {
 		let y = data.ratings[r.slug];
 		v.querySelector("#ra").style.display = "block";
@@ -663,19 +778,24 @@ function hashManager(e) {
 	} else {
 		v.querySelector("#ra").style.display = "none";
 	}
-
 	document.getElementById("cards").style = "opacity:1;visibility:visible";
 	document.getElementById("appcard").style = "transform:translate(50%, -50%)";
 	info_open = true;
-
-	document.querySelector("#appcard .close").addEventListener("click", function cliky() {
-		document.querySelector("#appcard .close").removeEventListener("click", cliky);
-		info_open = false;
-		location.hash = "";
-		document.getElementById("cards").removeAttribute("style");
-		document.getElementById("appcard").removeAttribute("style");
-		document.body.style.overflow = "auto";
-	});
+	if (isKai) {
+		if (location.hash != "") {
+			document.querySelector(".app.selected").classList.remove("selected");
+			document.querySelector("#appcard a,#img img").classList.add("selected");
+		}
+	} else {
+		document.querySelector("#appcard .close").addEventListener("click", function cliky() {
+			document.querySelector("#appcard .close").removeEventListener("click", cliky);
+			info_open = false;
+			location.hash = "";
+			document.getElementById("cards").removeAttribute("style");
+			document.getElementById("appcard").removeAttribute("style");
+			document.body.style.overflow = "auto";
+		});
+	}
 }
 
 (() => {

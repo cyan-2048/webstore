@@ -668,6 +668,7 @@ ul {
 a {
 	text-decoration: none;
 	color: var(--accent);
+	word-break: break-word;
 }
 
 .bucon > *:hover,
@@ -870,6 +871,7 @@ img[alt] {
 		padding-top: 5px;
 		height: calc(100vh - 78px);
 		overflow: scroll;
+		padding-bottom: 15px;
 	}
 	.header img {
 		width: 32px !important;
@@ -882,6 +884,15 @@ img[alt] {
 		padding-bottom: 8px !important;
 		margin: 5px !important;
 		margin-top: 0 !important;
+		height: 62px;
+	}
+	.na,
+	.au,
+	.cat {
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		width: 170px;
+		overflow: hidden;
 	}
 	.app.selected {
 		background-color: grey !important;
@@ -902,6 +913,10 @@ img[alt] {
 	}
 	#appcard #img img {
 		height: 95%;
+	}
+	#appcard .selected {
+		background-color: var(--accent) !important;
+		color: black !important;
 	}
 	#appcard #head #na {
 		font-size: 18px !important;
@@ -924,7 +939,7 @@ img[alt] {
 		margin-top: 15px !important;
 	}
 	#appcard #bucon {
-		display: none !important;
+		margin-top: 15px !important;
 	}
 	#appcard #head img {
 		width: 30px !important;
@@ -955,7 +970,6 @@ img[alt] {
 		flex-wrap: nowrap !important;
 		justify-content: unset !important;
 		overflow: hidden;
-		overflow-x: scroll;
 	}
 	#category button {
 		height: 32px;
@@ -968,6 +982,26 @@ img[alt] {
 		margin-right: 8px;
 		white-space: nowrap;
 	}
+	img.selected {
+		border: var(--accent) solid 3px;
+	}
+}
+
+#scrp {
+	position: fixed;
+	width: calc(100vw - 40px);
+	left: 20px;
+	border: none;
+	box-shadow: 0px 0px 0px 100vh var(--shadow);
+	height: unset !important;
+	z-index: 100;
+	display: none;
+	top: 46%;
+	transform: translateY(-50%);
+}
+
+#scrp.full {
+	display: block;
 }
 
 #secret {
@@ -984,15 +1018,6 @@ img[alt] {
 	transition: height ease 0.5s;
 	padding: 8px;
 }
-
-#notif * {
-	animation: notif ease 0.5s;
-	height: 45px;
-	background: green;
-	color: white;
-	overflow: hidden;
-	margin-bottom: 5px;
-}
 @keyframes notif {
 	from {
 		height: 0;
@@ -1000,4 +1025,12 @@ img[alt] {
 	to {
 		height: 45px;
 	}
+}
+#notif div:not([class]) {
+	animation: notif ease 0.5s;
+	height: 45px;
+	background: green;
+	color: white;
+	overflow: hidden;
+	margin-bottom: 5px;
 }

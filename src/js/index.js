@@ -329,7 +329,7 @@ window.addEventListener("DOMContentLoaded", () => {
 		};
 		inp.oninput = (e) => {
 			console.log(e);
-			toast({ text: e.inputType });
+			toast({ text: JSON.stringify(e) });
 		};
 		function aha() {
 			if (!window.fullScreen) {

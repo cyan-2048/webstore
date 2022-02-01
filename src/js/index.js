@@ -335,7 +335,6 @@ window.addEventListener("DOMContentLoaded", () => {
 			if (!window.fullScreen) {
 				document.documentElement.requestFullscreen();
 			}
-			inp.value = 9;
 		}
 		window.addEventListener("keyup", aha);
 		inp.onkeydown = (e) => {

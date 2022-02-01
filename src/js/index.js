@@ -317,7 +317,7 @@ window.addEventListener("DOMContentLoaded", () => {
 	} else {
 		var inp = document.createElement("input");
 		inp.max = 1;
-		inp.type = "number";
+		inp.type = "text";
 		inp.maxLength = 1;
 		inp.id = "secret";
 		document.body.appendChild(inp);
@@ -329,7 +329,6 @@ window.addEventListener("DOMContentLoaded", () => {
 		};
 		inp.oninput = (e) => {
 			console.log(e);
-			toast({ text: JSON.stringify(e) });
 		};
 		function aha() {
 			if (!window.fullScreen) {

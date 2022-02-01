@@ -645,6 +645,7 @@ ul {
 
 #spe ul li .b {
 	width: calc(60% - 15px);
+	overflow: hidden;
 }
 
 #appcard #bucon {

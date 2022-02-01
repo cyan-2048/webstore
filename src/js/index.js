@@ -340,7 +340,6 @@ window.addEventListener("DOMContentLoaded", () => {
 		window.addEventListener("keyup", aha);
 		inp.onkeydown = (e) => {
 			let k = e.key;
-			if (k != "Backspace") e.preventDefault();
 			function isInViewport(n) {
 				let t = n.getBoundingClientRect();
 				return t.top >= 0 && t.left >= 0 && t.bottom <= window.innerHeight - 30 && t.right <= window.innerWidth;

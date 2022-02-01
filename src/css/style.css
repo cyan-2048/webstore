@@ -1017,6 +1017,7 @@ img[alt] {
 	bottom: 0;
 	transition: height ease 0.5s;
 	padding: 8px;
+	z-index: 9999;
 }
 @keyframes notif {
 	from {

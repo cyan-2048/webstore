@@ -392,10 +392,10 @@ window.addEventListener("DOMContentLoaded", () => {
 					let ac = document.getElementById("appcard");
 					switch (k) {
 						case "ArrowDown":
-							ac.scrollBy({ left: 0, top: 70, behavior: "smooth" });
+							ac.scrollBy({ left: 0, top: 100, behavior: "smooth" });
 							break;
 						case "ArrowUp":
-							ac.scrollBy({ left: 0, top: -70, behavior: "smooth" });
+							ac.scrollBy({ left: 0, top: -100, behavior: "smooth" });
 							break;
 					}
 				}

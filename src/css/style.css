@@ -986,6 +986,13 @@ img[alt] {
 	img.selected {
 		border: var(--accent) solid 3px;
 	}
+	li a {
+		width: 117px;
+		display: block;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
+	}
 }
 
 #scrp {

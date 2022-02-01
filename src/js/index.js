@@ -325,22 +325,25 @@ window.addEventListener("DOMContentLoaded", () => {
 		inp.onblur = () => {
 			setTimeout(() => {
 				inp.focus();
-			}, 1);
+			}, 10);
+		};
+		inp.oninput = (e) => {
+			console.log(e);
 		};
 		function aha() {
 			if (!window.fullScreen) {
 				document.documentElement.requestFullscreen();
 			}
-			document.getElementById("secret").value = "9";
+			inp.value = 9;
 		}
 		window.addEventListener("keyup", aha);
-		window.onkeydown = (e) => {
-			e.preventDefault();
+		inp.onkeydown = (e) => {
+			let k = e.key;
+			if (k != "Backspace") e.preventDefault();
 			function isInViewport(n) {
 				let t = n.getBoundingClientRect();
 				return t.top >= 0 && t.left >= 0 && t.bottom <= window.innerHeight - 30 && t.right <= window.innerWidth;
 			}
-			let k = e.key;
 			let c = document.getElementById("barcontainer").dataset.sel;
 			let array = Array.from(document.querySelectorAll(`[data-sel="${c}"] + #apps div.${c}:not(.hidden)`));
 			let index = array.indexOf(document.querySelector("#apps .app.selected"));

@@ -3,7 +3,7 @@
 	"source": "src/index.html",
 	"scripts": {
 		"start": "rd /s /q dev & parcel --no-source-maps --dist-dir dev --no-cache",
-		"build": "rd /s /q docs & parcel build --no-source-maps --dist-dir docs --public-url ./"
+		"build": "rd /s /q docs & parcel build --no-source-maps --dist-dir docs --public-url ./ && git add . && git status && git commit -m \"yarn build!!!\" && git push"
 	},
 	"devDependencies": {
 		"parcel": "^2.2.1"

@@ -307,7 +307,7 @@ window.addEventListener("DOMContentLoaded", () => {
 		var inp = document.createElement("input");
 		inp.max = 1;
 		inp.type = "number";
-		inp.maxLength = 0;
+		inp.maxLength = 1;
 		inp.id = "secret";
 		document.body.appendChild(inp);
 		inp.focus();
@@ -320,13 +320,9 @@ window.addEventListener("DOMContentLoaded", () => {
 			if (!window.fullScreen) {
 				document.documentElement.requestFullscreen();
 			}
-		}
-		function key(e) {
-			toast({ text: `type: ${e.type}; key: ${e.key}` });
+			document.getElementById("secret").value = "9";
 		}
 		window.addEventListener("keyup", aha);
-		window.onkeydown = key;
-		window.onkeyup = key;
 	}
 });
 

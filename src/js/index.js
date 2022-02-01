@@ -327,9 +327,6 @@ window.addEventListener("DOMContentLoaded", () => {
 				inp.focus();
 			}, 10);
 		};
-		inp.oninput = (e) => {
-			console.log(e);
-		};
 		function aha() {
 			if (!window.fullScreen) {
 				document.documentElement.requestFullscreen();

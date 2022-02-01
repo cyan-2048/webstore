@@ -1006,7 +1006,7 @@ img[alt] {
 
 #secret {
 	position: fixed;
-	top: 0;
+	top: -10vh;
 	z-index: 999;
 }
 

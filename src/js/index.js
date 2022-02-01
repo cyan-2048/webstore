@@ -147,7 +147,7 @@ var init = (e) => {
 
 		b.insertBefore(ic, b.childNodes[0]);
 		b.dataset.name = c;
-		y += `[data-sel="${c}"] + #apps div.${c}`;
+		y += `[data-sel="${c}"] + #apps div.${c}:not(.hidden)`;
 		if (e == cats.length - 1) {
 			y += `{ display: flex !important}`;
 		} else {
@@ -238,7 +238,7 @@ var init = (e) => {
 		document.getElementById("splash").style = "opacity: 0; visibility: hidden";
 	}
 	if (location.hash != "") hashManager(undefined);
-	document.getElementById("le").innerText = document.querySelectorAll(`[data-sel="app"] + #apps .app`).length;
+	if (!isKai) document.getElementById("le").innerText = document.querySelectorAll(`[data-sel="app"] + #apps .app:not(.hidden)`).length;
 };
 
 var lastScroll = 0;
@@ -258,7 +258,7 @@ window.addEventListener("DOMContentLoaded", () => {
 			k.removeAttribute("class");
 		}
 		t.className = "selected";
-		document.getElementById("le").innerText = document.querySelectorAll(`[data-sel="${t.dataset.name}"] + #apps .${t.dataset.name}`).length;
+		document.getElementById("le").innerText = document.querySelectorAll(`[data-sel="${t.dataset.name}"] + #apps .${t.dataset.name}:not(.hidden)`).length;
 	};
 
 	if (!isKai) {
@@ -285,6 +285,24 @@ window.addEventListener("DOMContentLoaded", () => {
 				}
 			});
 		}
+
+		document.getElementById("search").oninput = (e) => {
+			let val = e.target.value.toLocaleLowerCase();
+			if (val == "") document.querySelectorAll(".hidden").forEach((e) => e.classList.remove("hidden"));
+			document.querySelectorAll(".app").forEach((el) => {
+				let slug = el.dataset.slug;
+				let r = data.apps.find((o) => {
+					return o.slug == slug;
+				});
+				if ((r.description + r.meta.tags + r.name + r.author).replace(/[; .]/g, "").replace(/<(.*)/g, "").toLowerCase().includes(val)) {
+					el.classList.remove("hidden");
+				} else {
+					el.classList.add("hidden");
+				}
+			});
+			let c = document.getElementById("barcontainer").dataset.sel;
+			document.getElementById("le").innerText = document.querySelectorAll(`[data-sel="${c}"] + #apps div.${c}:not(.hidden)`).length;
+		};
 	} else {
 		var inp = document.createElement("input");
 		inp.max = 1;
@@ -303,7 +321,12 @@ window.addEventListener("DOMContentLoaded", () => {
 				document.documentElement.requestFullscreen();
 			}
 		}
+		function key(e) {
+			toast({ text: `type: ${e.type}; key: ${e.key}` });
+		}
 		window.addEventListener("keyup", aha);
+		window.onkeydown = key;
+		window.onkeyup = key;
 	}
 });
 
@@ -629,6 +652,29 @@ function hashManager(e) {
 	});
 }
 
+(() => {
+	toast = (a) => {
+		try {
+			let o = Object.keys(a);
+			var n = document.getElementById("notif");
+			var t = document.createElement("div");
+			if (o.includes("text")) {
+				t.innerText = a.text;
+			}
+			if (o.includes("delay")) {
+				setTimeout(() => {
+					t.remove();
+				}, 1000 * o.delay);
+			}
+			if (o.includes("element")) {
+				n.appendChild(o.element);
+				return;
+			}
+			n.appendChild(t);
+		} catch (e) {}
+	};
+})();
+
 function getAppRatings(appID, cb) {
 	fetch(`${ratings}/ratings/${appID}`)
 		.then((response) => response.json())
@@ -663,4 +709,8 @@ function clipboard(o) {
 		}
 		document.body.removeChild(e);
 	}
+}
+
+if (window.NodeList && !NodeList.prototype.forEach) {
+	NodeList.prototype.forEach = Array.prototype.forEach;
 }

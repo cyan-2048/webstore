@@ -94,13 +94,22 @@ html {
 	left: 0;
 	overflow: auto;
 	overflow-x: hidden;
-	background-color: var(--back3);
+	background-color: var(--back4);
 }
 
 #apps {
 	background-color: var(--back4);
 	justify-content: center;
 	border-radius: 9px 9px 0px 0px;
+}
+
+#apps::before {
+	content: "";
+	position: absolute;
+	width: 100%;
+	height: 15px;
+	background: var(--back3);
+	z-index: -1;
 }
 
 #apps #container {
@@ -135,6 +144,7 @@ html {
 
 #barcontainer {
 	flex-flow: column;
+	background-color: var(--back3);
 }
 
 #bar1,
@@ -964,4 +974,30 @@ img[alt] {
 	opacity: 0;
 	position: fixed;
 	top: -100vh;
+}
+
+#notif {
+	position: fixed;
+	width: 100vw;
+	right: 0;
+	bottom: 0;
+	transition: height ease 0.5s;
+	padding: 8px;
+}
+
+#notif * {
+	animation: notif ease 0.5s;
+	height: 45px;
+	background: green;
+	color: white;
+	overflow: hidden;
+	margin-bottom: 5px;
+}
+@keyframes notif {
+	from {
+		height: 0;
+	}
+	to {
+		height: 45px;
+	}
 }

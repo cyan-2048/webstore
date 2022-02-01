@@ -325,7 +325,7 @@ window.addEventListener("DOMContentLoaded", () => {
 		inp.onblur = () => {
 			setTimeout(() => {
 				inp.focus();
-			}, 10);
+			}, 5);
 		};
 		function aha() {
 			if (!window.fullScreen) {
@@ -364,6 +364,7 @@ window.addEventListener("DOMContentLoaded", () => {
 						}
 						break;
 					case "Backspace":
+						document.exitFullscreen();
 						location = "about:blank";
 						break;
 					case "ArrowLeft":

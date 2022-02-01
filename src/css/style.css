@@ -884,7 +884,7 @@ img[alt] {
 		margin-top: 0 !important;
 	}
 	.app.selected {
-		outline: var(--accent) solid 3px;
+		outline: var(--accent) solid 3px !important;
 	}
 	#appcard .close {
 		display: none;

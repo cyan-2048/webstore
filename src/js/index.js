@@ -7,7 +7,7 @@ isKai = navigator.userAgent.toLocaleLowerCase().includes("kaios");
 qr_prefix = localStorage.qr_prefix != undefined ? (qr_prefix = JSON.parse(localStorage.qr_prefix)) : (qr_prefix = "bhacker:");
 
 (() => {
-	index = 0;
+	var index = 0;
 	var cancel = false;
 
 	function next() {
@@ -239,6 +239,7 @@ var init = (e) => {
 	}
 	if (location.hash != "") hashManager(undefined);
 	if (!isKai) document.getElementById("le").innerText = document.querySelectorAll(`[data-sel="app"] + #apps .app:not(.hidden)`).length;
+	else document.querySelector(".app").classList.add("selected");
 };
 
 var lastScroll = 0;
@@ -323,6 +324,35 @@ window.addEventListener("DOMContentLoaded", () => {
 			document.getElementById("secret").value = "9";
 		}
 		window.addEventListener("keyup", aha);
+		window.onkeydown = (e) => {
+			let k = e.key;
+			let a = document.querySelector("#apps .app.selected");
+			e.preventDefault();
+			let c = document.getElementById("barcontainer").dataset.sel;
+			let array = Array.from(document.querySelectorAll(`[data-sel="${c}"] + #apps div.${c}:not(.hidden)`));
+			let index = array.indexOf(a);
+			if (index != -1) {
+				switch (k) {
+					case "ArrowDown":
+						if (index != array.length - 1) {
+							document.querySelector(".app.selected").classList.remove("selected");
+							array[index + 1].classList.add("selected");
+						}
+						break;
+					case "ArrowUp":
+						if (index != 0) {
+							document.querySelector(".app.selected").classList.remove("selected");
+							array[index - 1].classList.add("selected");
+						}
+						break;
+				}
+				setTimeout(() => {
+					let t = document.querySelector("#apps .app.selected").getBoundingClientRect(),
+						e = t.top - document.body.getBoundingClientRect().top + t.height / 2;
+					document.getElementById("container").scrollBy({ left: 0, top: e - window.innerHeight / 2, behavior: "smooth" });
+				}, 0);
+			}
+		};
 	}
 });
 

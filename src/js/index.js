@@ -3,6 +3,7 @@ proxy = localStorage.proxy != undefined ? (proxy = JSON.parse(localStorage.proxy
 ratings = localStorage.ratings != undefined ? (ratings = JSON.parse(localStorage.ratings)) : (ratings = "https://bhackers.uber.space/srs/v1");
 database = localStorage.database != undefined ? (database = JSON.parse(localStorage.database)) : (database = "https://banana-hackers.gitlab.io/store-db/data.json");
 new_versions = {};
+// {'nihonoari':{'from':'0.0.8','to':'1.0.9'},'topomap':{'from':'1.0.3','to':'1.0.4'},'tweetfit':{'from':'0.0.2','to':'0.1.2'},'usersbible':{'from':'0.1','to':'1.1'},'userssudoku':{'from':'1.2','to':'1.3'}}
 isKai = navigator.userAgent.toLocaleLowerCase().includes("kaios");
 qr_prefix = localStorage.qr_prefix != undefined ? (qr_prefix = JSON.parse(localStorage.qr_prefix)) : (qr_prefix = "bhacker:");
 
@@ -12,10 +13,27 @@ qr_prefix = localStorage.qr_prefix != undefined ? (qr_prefix = JSON.parse(localS
 
 	function next() {
 		index = index + 1;
+		document.querySelector("#check .bar").style.width = (index / (data.apps.length - 1)) * 100 + "%";
 		if (index == data.apps.length || cancel) {
 			index = 0;
+			let t = document.getElementById("check");
+			t.style.animation = "fadeout ease .4s";
+			t.onanimationend = () => t.remove();
 			if (!cancel) {
 				localStorage.versions = JSON.stringify(last_check);
+				toast({ text: "checking for updates was successful!", delay: 5 });
+				if (Object.keys(new_versions).length == 0) {
+					toast({ text: "No new updates", delay: 5 });
+				} else {
+					var e = "New updates: \n";
+					Object.keys(new_versions).forEach((a) => {
+						let t = new_versions;
+						e += `${data.apps.find((p) => p.slug == a).name}: ${t[a].from} => ${t[a].to} \n`;
+					});
+					toast({ text: e });
+				}
+			} else {
+				toast({ text: "checking for updates cancelled!", class: "danger" });
 			}
 			cancel = false;
 			return;
@@ -28,6 +46,28 @@ qr_prefix = localStorage.qr_prefix != undefined ? (qr_prefix = JSON.parse(localS
 	};
 
 	update = () => {
+		if (index == 0) {
+			var w = document.createElement("div");
+			w.className = "blu";
+			w.id = "check";
+
+			w.appendChild(document.createTextNode("Checking for updates..."));
+
+			var p = document.createElement("div");
+			p.className = "progress";
+			p.innerHTML = "<div class=bar style='width:0%'></div>";
+			w.appendChild(p);
+
+			var c = document.createElement("button");
+			c.id = "close";
+			c.innerHTML = "<i class='fas fa-times'></i>";
+			c.onclick = () => {
+				cancel = true;
+			};
+			w.appendChild(c);
+
+			toast({ element: w });
+		}
 		let ef = data.apps[index];
 		function res(r) {
 			if (last_check[ef.slug] && last_check[ef.slug] != r.version) {
@@ -61,10 +101,12 @@ var database_init = () => {
 
 			if (document.readyState === "complete" || document.readyState === "interactive") {
 				init();
+				update();
 			} else {
 				window.addEventListener("DOMContentLoaded", () => {
 					let a = undefined;
 					init(a);
+					update();
 				});
 			}
 
@@ -87,7 +129,7 @@ var database_init = () => {
 				})
 				.catch((e) => {
 					console.error(e);
-					alert("can't download download counts, store will not have download count functionality");
+					toast({ class: "danger", text: "can't download download counts, store will not have download count functionality" });
 				})
 				.then(() => {
 					fetch(ratings + "/ratings")
@@ -109,7 +151,7 @@ var database_init = () => {
 						})
 						.catch((e) => {
 							console.error(e);
-							alert("can't download download ratings, store will not have ratings functionality");
+							toast({ class: "danger", text: "can't download download ratings, store will not have ratings functionality" });
 						});
 				});
 		});
@@ -299,7 +341,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 		document.getElementById("search").oninput = (e) => {
 			let val = e.target.value.toLocaleLowerCase();
-			if (val == "") document.querySelectorAll(".hidden").forEach((e) => e.classList.remove("hidden"));
+			if (val == "") document.querySelectorAll(".hidden").forEach((a) => a.classList.remove("hidden"));
 			document.querySelectorAll(".app").forEach((el) => {
 				let slug = el.dataset.slug;
 				let r = data.apps.find((o) => {
@@ -390,12 +432,19 @@ window.addEventListener("DOMContentLoaded", () => {
 			} else if (location.hash != "") {
 				if (index3 != -1) {
 					let ac = document.getElementById("appcard");
+					let p = () => {
+						if (document.getElementById("scrp").className != "") {
+							document.getElementById("scrp").className = "";
+						}
+					};
 					switch (k) {
 						case "ArrowDown":
 							ac.scrollBy({ left: 0, top: 100, behavior: "smooth" });
+							p();
 							break;
 						case "ArrowUp":
 							ac.scrollBy({ left: 0, top: -100, behavior: "smooth" });
+							p();
 							break;
 					}
 				}
@@ -800,24 +849,45 @@ function hashManager(e) {
 
 (() => {
 	toast = (a) => {
-		try {
-			let o = Object.keys(a);
-			var n = document.getElementById("notif");
-			var t = document.createElement("div");
-			if (o.includes("text")) {
-				t.innerText = a.text;
-			}
-			if (o.includes("delay")) {
-				setTimeout(() => {
-					t.remove();
-				}, 1000 * o.delay);
-			}
-			if (o.includes("element")) {
-				n.appendChild(o.element);
-				return;
-			}
-			n.appendChild(t);
-		} catch (e) {}
+		if (!isKai) {
+			try {
+				let o = Object.keys(a);
+				var n = document.getElementById("notif");
+				var t = document.createElement("div");
+				var timeout = null;
+				function close() {
+					t.style.animation = "fadeout ease .4s";
+					t.onanimationend = () => t.remove();
+				}
+				if (o.includes("text")) {
+					t.innerText = a.text;
+				}
+				if (o.includes("delay")) {
+					timeout = setTimeout(close, 1000 * a.delay);
+				}
+				if (o.includes("element")) {
+					n.appendChild(a.element);
+					return;
+				}
+				var c = document.createElement("button");
+				c.id = "close";
+				c.innerHTML = "<i class='fas fa-times'></i>";
+
+				if (o.includes("cb")) {
+					c.onclick = a.cb;
+				} else {
+					c.onclick = () => {
+						if (timeout != null) clearTimeout(timeout);
+						close();
+					};
+				}
+				if (o.includes("class")) {
+					t.className = a.class;
+				}
+				t.appendChild(c);
+				n.appendChild(t);
+			} catch (e) {}
+		}
 	};
 })();
 

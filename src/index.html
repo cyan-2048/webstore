@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>webstore alpha</title>
+		<title>WebStore - BananaHackers</title>
 		<script src="./js/index.js"></script>
 		<script src="./js/qr.js"></script>
 		<link
@@ -14,6 +14,7 @@
 			crossorigin="anonymous"
 			referrerpolicy="no-referrer"
 		/>
+		<link rel="shortcut icon" href="./css/favicon.png" type="image/png" />
 		<link rel="stylesheet" href="./css/style.css" />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -28,7 +29,34 @@
 		</div>
 		<div id="barcontainer">
 			<div id="bar1">
-				<a href="https://groups.google.com/g/bananahackers">Forums</a>
+				<img id="logo" src="css/favicon.png" />
+				<input type="checkbox" id="burger" />
+				<i class="fas"></i>
+				<a href="https://groups.google.com/g/bananahackers" target="_blank">Forums</a>
+				<div class="sub">
+					<a>Wikis <i class="fas fa-chevron-down"></i></a>
+					<div class="drop">
+						<a href="https://wiki.bananahackers.net" target="_blank">Wiki (current)</a>
+						<a href="http://bananahackers.net" target="_blank">Wiki (legacy)</a>
+					</div>
+				</div>
+
+				<div class="sub">
+					<a>Chat <i class="fas fa-chevron-down"></i></a>
+					<div class="drop">
+						<a href="https://discord.gg/rQ93zEu" target="_blank">Discord</a>
+						<a href="https://matrix.to/#/!bHojAVTxOAfeEMLjkS:mozilla.org" target="_blank">Matrix</a>
+					</div>
+				</div>
+
+				<div class="sub">
+					<a>App Databases <i class="fas fa-chevron-down"></i></a>
+					<div class="drop">
+						<a href="https://gitlab.com/banana-hackers/store-db" target="_blank">BananaHackers - GitLab</a>
+						<a href="https://github.com/bananahackers/store-db" target="_blank">BananaHackers - GitHub (mirror)</a>
+						<a href="https://sites.google.com/view/b-hackers-store/home" target="_blank">Old b-hackers store</a>
+					</div>
+				</div>
 			</div>
 			<div id="bar2">
 				<select id="sort">

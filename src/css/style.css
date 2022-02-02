@@ -117,7 +117,6 @@ html {
 	padding-top: 50px;
 	padding-left: 12px;
 	padding-right: 12px;
-	padding-bottom: 67px;
 	flex-wrap: wrap;
 	justify-content: flex-start;
 }
@@ -175,7 +174,8 @@ html,
 #appcard #bucon button,
 #appcard #bucon a,
 .bucon,
-#rabox {
+#rabox,
+#bar1 {
 	display: flex;
 }
 
@@ -331,7 +331,7 @@ sel,
 
 #le {
 	line-height: 39px;
-	margin-right: 10px;
+	margin: 0 10px;
 	font-weight: 600;
 	color: var(--color1);
 }
@@ -523,6 +523,90 @@ button {
 	button:hover {
 		opacity: 1 !important;
 	}
+	#bar1 {
+		flex-flow: column;
+	}
+	#bar1 *::after {
+		display: none;
+	}
+	#bar1 > * {
+		margin-bottom: 10px;
+	}
+	a:hover + .drop,
+	.drop:hover,
+	.sub .drop {
+		display: block !important;
+		position: static !important;
+		background-color: white !important;
+		width: 100vw !important;
+		max-width: unset !important;
+		box-shadow: none !important;
+	}
+
+	.sub > a {
+		opacity: 1 !important;
+	}
+
+	.drop a {
+		width: 100vw !important;
+		max-width: unset !important;
+		padding: 8px 16px !important;
+		font-size: 12px;
+	}
+	.sub > a,
+	#bar1 > a {
+		margin-bottom: 8px !important;
+		display: block;
+		margin-left: 10px;
+		font-size: 15px !important;
+	}
+	#bar1 {
+		padding: 0 !important;
+	}
+	#logo {
+		margin-left: 10px !important;
+		margin-top: 10px !important;
+	}
+	#burger:checked ~ * {
+		display: block !important;
+	}
+	#burger ~ * {
+		display: none !important;
+	}
+	#burger,
+	#burger + i {
+		display: block !important;
+		position: absolute;
+		right: 10px;
+		top: 10px;
+		margin: 0 !important;
+		width: 19px;
+		height: 19px;
+		opacity: 0;
+	}
+	#burger:checked + i::before {
+		content: "\f00d";
+	}
+	#burger + i::before {
+		content: "\f0c9";
+	}
+	#burger + i {
+		opacity: 1;
+		z-index: 0;
+		font-size: 19px !important;
+		font-weight: 900 !important;
+		color: #323232 !important;
+		font-style: normal;
+		font-variant: normal;
+		text-rendering: auto;
+		line-height: 1;
+		text-align: center;
+	}
+}
+
+#burger,
+#burger + i {
+	display: none;
 }
 
 #cards .close {
@@ -1020,26 +1104,178 @@ img[alt] {
 
 #notif {
 	position: fixed;
-	width: 100vw;
 	right: 0;
 	bottom: 0;
-	transition: height ease 0.5s;
-	padding: 8px;
+	padding: 0 8px;
 	z-index: 9999;
+	width: 400px;
+	max-height: 100vh;
+	overflow: hidden;
 }
 @keyframes notif {
 	from {
-		height: 0;
+		opacity: 0;
+		transform: translateX(400px);
 	}
 	to {
-		height: 45px;
+		opacity: 1;
+		transform: none;
 	}
 }
-#notif div:not([class]) {
+@keyframes fadeout {
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+	}
+}
+#notif div {
 	animation: notif ease 0.5s;
 	height: unset;
-	background: green;
+	background: #48c774;
 	color: white;
 	overflow: hidden;
 	margin-bottom: 5px;
+	padding: 16px;
+	border-radius: 5px;
+	font-size: 17px;
+	position: relative;
+}
+
+#notif div.danger {
+	background: #f14668;
+}
+
+#notif div.blu {
+	background: #3298dc;
+}
+
+button#close {
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	overflow: hidden;
+	position: absolute;
+	top: 5px;
+	background: rgba(0, 0, 0, 0.4);
+	right: 6px;
+	line-height: 0.3;
+	padding: 0px;
+	text-align: center;
+	border: none;
+	color: white;
+}
+button#close:hover {
+	opacity: 0.5;
+}
+button#close:active {
+	opacity: 0.3;
+}
+#close i {
+	font-size: 10px;
+}
+
+#notif .progress {
+	background: rgba(0, 0, 0, 0.3);
+	padding: 0;
+	overflow: hidden;
+	height: 10px;
+	border-radius: 30px;
+	margin-top: 10px;
+	position: relative;
+}
+#notif .bar {
+	position: absolute;
+	left: 0px;
+	top: 0;
+	border-radius: 0px;
+	padding: 0;
+	background-color: #00d1b2;
+	margin: 0;
+	height: 100%;
+	width: 0%;
+}
+
+#logo {
+	width: 19px;
+	height: 19px;
+	display: inline-block;
+	top: 1px;
+}
+
+#bar1 > *,
+.sub > a {
+	color: #323232;
+	font-weight: 600;
+	font-size: 17px;
+	margin-right: 18px;
+}
+
+#bar1 {
+	padding-bottom: 0px;
+	user-select: none;
+	box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+#bar1 * {
+	user-select: none;
+}
+
+.sub > a {
+	margin-right: 0 !important;
+	cursor: pointer;
+}
+
+#bar1 a:hover {
+	opacity: 0.7;
+}
+
+#bar1 i {
+	font-size: 15px;
+	margin-left: 2px;
+}
+
+a + .drop {
+	display: none;
+}
+
+a:hover + .drop,
+.drop:hover {
+	display: block;
+	position: absolute;
+	left: -5px;
+	background-color: white;
+	max-width: 300px;
+	z-index: 99;
+	box-shadow: 0 2px 5px var(--shadow);
+}
+
+.sub > a::after {
+	content: "";
+	height: 10px;
+	width: 100%;
+	display: block;
+	background: var(--accent);
+}
+
+.drop a {
+	color: rgb(170, 170, 170);
+	display: block;
+	white-space: nowrap;
+	max-width: 300px;
+	font-size: 16px;
+	padding: 10px 15px;
+	font-weight: 700;
+	line-height: 1.5;
+}
+
+.drop a:hover {
+	opacity: 1;
+	color: var(--accent);
+	background-color: whitesmoke;
+}
+
+.sub {
+	position: relative;
 }

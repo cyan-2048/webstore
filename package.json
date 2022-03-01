@@ -1,11 +1,17 @@
 {
 	"name": "webstore",
 	"source": "src/index.html",
+	"private": "true",
 	"scripts": {
-		"start": "rd /s /q dev & parcel --no-source-maps --dist-dir dev --no-cache",
-		"build": "rd /s /q docs & parcel build --no-source-maps --dist-dir docs --public-url ./ && git add . && git status && git commit -m \"yarn build!!!\" && git push"
+		"build": "webpack --config webpack.config.js --progress"
 	},
-	"devDependencies": {
-		"parcel": "^2.2.1"
+	"dependencies": {
+		"@babel/core": "^7.9.0",
+		"@babel/preset-env": "^7.9.5",
+		"babel-loader": "^8.1.0",
+		"core-js": "^3.21.1",
+		"qr.js": "github:defunctzombie/qr.js",
+		"webpack": "^4.42.1",
+		"webpack-cli": "^3.3.11"
 	}
 }

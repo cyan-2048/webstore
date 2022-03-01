@@ -1,1 +1,135 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WebStore - BananaHackers</title><script src="index.bf8f6d4e.js"></script><script src="index.7c14503b.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin referrerpolicy="no-referrer"><link rel="icon shortcut" href="favicon.c06970af.png" type="image/png"><link rel="stylesheet" href="index.2e0b170c.css"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet"></head><body> <div id="splash"> <div id="image"> <div id="banana1"></div> <div id="banana2"></div> </div> </div> <div id="barcontainer"> <div id="bar1"> <img id="logo" src="favicon.c06970af.png"> <input type="checkbox" id="burger"> <i class="fas"></i> <a href="https://groups.google.com/g/bananahackers" target="_blank">Forums</a> <div class="sub"> <a>Wikis <i class="fa-chevron-down fas"></i></a> <div class="drop"> <a href="https://wiki.bananahackers.net" target="_blank">Wiki (current)</a> <a href="http://bananahackers.net" target="_blank">Wiki (legacy)</a> </div> </div> <div class="sub"> <a>Chat <i class="fa-chevron-down fas"></i></a> <div class="drop"> <a href="https://discord.gg/rQ93zEu" target="_blank">Discord</a> <a href="https://matrix.to/#/!bHojAVTxOAfeEMLjkS:mozilla.org" target="_blank">Matrix</a> </div> </div> <div class="sub"> <a>App Databases <i class="fa-chevron-down fas"></i></a> <div class="drop"> <a href="https://gitlab.com/banana-hackers/store-db" target="_blank">BananaHackers - GitLab</a> <a href="https://github.com/bananahackers/store-db" target="_blank">BananaHackers - GitHub (mirror)</a> <a href="https://sites.google.com/view/b-hackers-store/home" target="_blank">Old b-hackers store</a> </div> </div> </div> <div id="bar2"> <select id="sort"> <option value="abc">Alphabetical</option> <option value="cab">Categorical</option> </select> <sel id="sort" tabindex="0"> <cho value="abc"><i class="fa-sort-alpha-down fas"></i>Alphabetical</cho> <drop> <opt value="abc"><i class="fa-sort-alpha-down fas"></i>Alphabetical</opt> <opt value="cab"><i class="fa-tags fas"></i>Categorical</opt> </drop> </sel> <div class="spacer"></div> <div id="le">0</div> <input id="search" type="text"> </div> <div id="category"> <style></style> </div> </div> <div id="apps"> <div id="container"></div> </div> <div id="cards"> <div id="appcard"> <div class="close"><i class="fa-times fas"></i></div> <div id="head"> <img> <div id="boxue"> <div id="na"></div> <div id="ca"></div> <div id="de"></div> </div> </div> <div id="bucon"></div> <div id="de"> <div class="ti">Description</div> </div> <div id="scr"> <div class="ti">Screenshots</div> <div id="img"></div> </div> <div id="spe"> <div class="ti">Specifications</div> <ul></ul> </div> <div id="qr"> <div class="ti">QR Code for on-device client</div> <div id="qrcode"></div> </div> <div id="ra"> <div class="ti">Ratings</div> <div id="rabox"> <div id="ave"> <div id="sco"></div> <div id="stars"></div> <div id="to"><i class="fa-user fas"></i></div> </div> <div id="cha"> <div data-r="5"></div> <div data-r="4"></div> <div data-r="3"></div> <div data-r="2"></div> <div data-r="1"></div> </div> </div> <div id="chat"></div> </div> </div> </div> <img id="scrp"> <div id="notif"></div> </body></html>
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>WebStore - BananaHackers</title>
+		<script src="./js/bundle.js"></script>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+			integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer"
+		/>
+		<link rel="shortcut icon" href="./css/favicon.png" type="image/png" />
+		<link rel="stylesheet" href="./css/style.css" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet" />
+	</head>
+	<body>
+		<div id="splash">
+			<div id="image">
+				<div id="banana1"></div>
+				<div id="banana2"></div>
+			</div>
+		</div>
+		<div id="barcontainer">
+			<div id="bar1">
+				<img id="logo" src="css/favicon.png" />
+				<input type="checkbox" id="burger" />
+				<i class="fas"></i>
+				<a href="https://groups.google.com/g/bananahackers" target="_blank">Forums</a>
+				<div class="sub">
+					<a>Wikis <i class="fas fa-chevron-down"></i></a>
+					<div class="drop">
+						<a href="https://wiki.bananahackers.net" target="_blank">Wiki (current)</a>
+						<a href="http://bananahackers.net" target="_blank">Wiki (legacy)</a>
+					</div>
+				</div>
+
+				<div class="sub">
+					<a>Chat <i class="fas fa-chevron-down"></i></a>
+					<div class="drop">
+						<a href="https://discord.gg/rQ93zEu" target="_blank">Discord</a>
+						<a href="https://matrix.to/#/!bHojAVTxOAfeEMLjkS:mozilla.org" target="_blank">Matrix</a>
+					</div>
+				</div>
+
+				<div class="sub">
+					<a>App Databases <i class="fas fa-chevron-down"></i></a>
+					<div class="drop">
+						<a href="https://gitlab.com/banana-hackers/store-db" target="_blank">BananaHackers - GitLab</a>
+						<a href="https://github.com/bananahackers/store-db" target="_blank">BananaHackers - GitHub (mirror)</a>
+						<a href="https://sites.google.com/view/b-hackers-store/home" target="_blank">Old b-hackers store</a>
+					</div>
+				</div>
+			</div>
+			<div id="bar2">
+				<select id="sort">
+					<option value="abc">Alphabetical</option>
+					<option value="cab">Categorical</option>
+				</select>
+				<sel id="sort" tabindex="0">
+					<cho value="abc"><i class="fas fa-sort-alpha-down"></i>Alphabetical</cho>
+					<drop>
+						<opt value="abc"><i class="fas fa-sort-alpha-down"></i>Alphabetical</opt>
+						<opt value="cab"><i class="fas fa-tags"></i>Categorical</opt>
+					</drop>
+				</sel>
+
+				<div class="spacer"></div>
+
+				<div id="le">0</div>
+				<input id="search" type="text" />
+			</div>
+			<div id="category">
+				<style></style>
+			</div>
+		</div>
+		<div id="apps">
+			<div id="container"></div>
+		</div>
+		<div id="cards">
+			<div id="appcard">
+				<div class="close"><i class="fas fa-times"></i></div>
+				<div id="head">
+					<img />
+					<div id="boxue">
+						<div id="na"></div>
+						<div id="ca"></div>
+						<div id="de"></div>
+					</div>
+				</div>
+				<div id="bucon"></div>
+				<div id="de">
+					<div class="ti">Description</div>
+				</div>
+				<div id="scr">
+					<div class="ti">Screenshots</div>
+					<div id="img"></div>
+				</div>
+				<div id="spe">
+					<div class="ti">Specifications</div>
+					<ul></ul>
+				</div>
+				<div id="qr">
+					<div class="ti">QR Code for on-device client</div>
+					<div id="qrcode"></div>
+				</div>
+				<div id="ra">
+					<div class="ti">Ratings</div>
+					<div id="rabox">
+						<div id="ave">
+							<div id="sco"></div>
+							<div id="stars"></div>
+							<div id="to"><i class="fas fa-user"></i></div>
+						</div>
+						<div id="cha">
+							<div data-r="5"></div>
+							<div data-r="4"></div>
+							<div data-r="3"></div>
+							<div data-r="2"></div>
+							<div data-r="1"></div>
+						</div>
+					</div>
+					<div id="chat"></div>
+				</div>
+			</div>
+		</div>
+		<img id="scrp" />
+		<div id="notif"></div>
+	</body>
+</html>

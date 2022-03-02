@@ -52,7 +52,6 @@ class Update {
 
 const update = () => {
 	const _update = new Update();
-
 	if (!isKai) {
 		var w = document.createElement("div");
 		w.className = "blu";
@@ -70,37 +69,39 @@ const update = () => {
 		};
 		w.appendChild(c);
 		toast({ element: w });
-	}
-	_update.onprogress = function () {
-		p.children[0].style.width = this.progress + "%";
-	};
-	_update.onsuccess = function () {
-		let updates_text = "New updates: \n";
-		Object.keys(this.versions).forEach((a) => {
-			let n = this.versions;
-			updates_text += `${data.apps.find((p) => p.slug == a).name}: ${n[a].from} => ${n[a].to} \n`;
-		});
-		if (!isKai) {
-			w.style.animation = "fadeout ease .4s";
-			w.onanimationend = () => w.remove();
-			if (!this.cancel) {
-				localStorage.versions = JSON.stringify(last_check);
-				toast({ text: "checking for updates was successful!", delay: 5 });
-				if (Object.keys(this.versions).length == 0) toast({ text: "No new updates", delay: 5 });
-				else toast({ text: updates_text });
-			} else {
-				toast({ text: "checking for updates cancelled!", class: "danger" });
+		_update.onprogress = function () {
+			p.children[0].style.width = this.progress + "%";
+		};
+		_update.onsuccess = function () {
+			let updates_text = "New updates: \n";
+			Object.keys(this.versions).forEach((a) => {
+				let n = this.versions;
+				updates_text += `${data.apps.find((p) => p.slug == a).name}: ${n[a].from} => ${n[a].to} \n`;
+			});
+			if (!isKai) {
+				w.style.animation = "fadeout ease .4s";
+				w.onanimationend = () => w.remove();
+				if (!this.cancel) {
+					localStorage.versions = JSON.stringify(last_check);
+					toast({ text: "checking for updates was successful!", delay: 5 });
+					if (Object.keys(this.versions).length == 0) toast({ text: "No new updates", delay: 5 });
+					else toast({ text: updates_text });
+				} else {
+					toast({ text: "checking for updates cancelled!", class: "danger" });
+				}
 			}
-		} else {
+			localStorage.versions = JSON.stringify(last_check);
+		};
+	} else {
+		_update.onsuccess = function () {
 			if (!Object.keys(this.versions).length == 0) {
 				let a = window.open("");
 				a.document.body.innerText = updates_text;
 			}
-
+			localStorage.versions = JSON.stringify(last_check);
 			// abandoned, too lazy...
-		}
-		localStorage.versions = JSON.stringify(last_check);
-	};
+		};
+	}
 };
 
 function databaseInit() {
@@ -385,7 +386,7 @@ window.addEventListener("DOMContentLoaded", function load() {
 		};
 		window.addEventListener("keyup", () => {
 			// check if user is actually using a KaiOS device
-			if (!window.fullScreen && String.prototype.replaceAll == undefined) {
+			if (!window.fullScreen && navigator.mozApps) {
 				document.documentElement.requestFullscreen();
 			}
 		});

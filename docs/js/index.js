@@ -94,6 +94,11 @@ const update = () => {
 		};
 	} else {
 		_update.onsuccess = function () {
+			let updates_text = "New updates: \n";
+			Object.keys(this.versions).forEach((a) => {
+				let n = this.versions;
+				updates_text += `${data.apps.find((p) => p.slug == a).name}: ${n[a].from} => ${n[a].to} \n`;
+			});
 			if (!Object.keys(this.versions).length == 0) {
 				let a = window.open("");
 				a.document.body.innerText = updates_text;
